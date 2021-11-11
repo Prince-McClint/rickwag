@@ -1,0 +1,182 @@
+﻿@page "/"
+
+@inject MyAuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <header>
+                <span class="oi oi-play-circle logo" />
+
+                <nav class="nav-buttons">
+                    <ul>
+                        <li><button class="nav-btn" @onclick="Logout">logout</button></li>
+                        <li><button class="nav-btn" @onclick="OnAboutClick">about</button></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <main>
+                <div class="title">
+                    <h1>Word Jumble</h1>
+                    <h4>words can play</h4>
+                </div>
+
+                <div class="content">
+                    <button class="play-btn" @onclick="GoToPlayGround">play game</button>
+                </div>
+            </main>
+
+            <div class="nav-show-about">
+                @if (aboutVisible)
+                {
+                    <AboutDropDown CloseAbout="ToggleAbout"/>
+                }
+            </div>
+
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="container">
+            <header>
+                <span class="oi oi-play-circle logo" />
+
+                <nav class="nav-buttons">
+                    <ul>
+                        <li><button class="nav-btn" @onclick="OnLoginClick">login</button></li>
+                        <li><button class="nav-btn" @onclick="OnSignupClick">signup</button></li>
+                        <li><button class="nav-btn" @onclick="OnAboutClick">about</button></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <main>
+                <div class="title">
+                    <h1>Word Jumble</h1>
+                    <h4>words can play</h4>
+                </div>
+
+                <div class="content">
+                    <button class="play-btn" @onclick="GoToPlayGround">play game</button>
+                </div>
+            </main>
+
+            <div class="nav-show-login">
+                @if (loginVisible)
+                {
+                    <LoginDropDown LoginUser="LoginUser" CancelLogin="ToggleLogin"/>
+                }
+            </div>
+
+            <div class="nav-show-signup">
+                @if (signupVisible)
+                {
+                    <SignupDropDown RegisterNewUser="SignupNewUser" CancelSignup="ToggleSignup"/>
+                }
+            </div>
+
+            <div class="nav-show-about">
+                @if (aboutVisible)
+                {
+                    <AboutDropDown CloseAbout="ToggleAbout"/>
+                }
+            </div>
+
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    #region fields
+    private bool loginVisible = false;
+    private bool signupVisible = false;
+    private bool aboutVisible = false;
+    #endregion
+
+    #region methods
+
+    #region nav_click
+    private void ToggleLogin()
+    {
+        ResetNav(nameof(loginVisible));
+        loginVisible = loginVisible == true ? false : true;
+    }
+
+    private void ToggleSignup()
+    {
+        ResetNav(nameof(signupVisible));
+        signupVisible = signupVisible == true ? false : true;
+    }
+
+    private void ToggleAbout()
+    {
+        ResetNav(nameof(aboutVisible));
+        aboutVisible = aboutVisible == true ? false : true;
+    }
+
+    private void ResetNav(string exception)
+    {
+        //resets all the nav buttons to false except exception
+
+        if (exception == nameof(loginVisible))
+        {
+            signupVisible = false;
+            aboutVisible = false;
+        }
+        else if (exception == nameof(signupVisible))
+        {
+            loginVisible = false;
+            aboutVisible = false;
+        }
+        else if (exception == nameof(aboutVisible))
+        {
+            loginVisible = false;
+            signupVisible = false;
+        }
+    }
+
+    private void OnLoginClick()
+    {
+        ToggleLogin();
+    }
+
+    private void OnSignupClick()
+    {
+        ToggleSignup();
+    }
+
+    private void OnAboutClick()
+    {
+        ToggleAbout();
+    }
+    #endregion
+
+    #region authentication
+    public async Task SignupNewUser(SignupRequest signupRequest)
+    {
+        await AuthStateProvider.Signup(signupRequest);
+        ToggleSignup();
+    }
+
+    public async Task LoginUser(LoginRequest loginRequest)
+    {
+        await AuthStateProvider.Login(loginRequest);
+        ToggleLogin();
+    }
+
+    public async Task Logout()
+    {
+        await AuthStateProvider.Logout();
+    }
+    #endregion
+
+    public void GoToPlayGround()
+    {
+        NavManager.NavigateTo("playground");
+    }
+
+    #endregion
+}

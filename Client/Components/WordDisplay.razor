@@ -1,0 +1,18 @@
+﻿
+
+<div class="content">
+    
+    @foreach (var letter in Word)
+    {
+        <div class="letter-box">
+            <span class="letter">@letter</span>
+        </div>
+    }
+
+</div>
+
+@code {
+    #region properties
+    public string Word { get; set; } = "WORD";
+    #endregion
+}

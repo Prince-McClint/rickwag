@@ -1,0 +1,72 @@
+﻿
+
+<div class="container">
+    <NavDrop>
+            <EditForm Model="RegisterRequest" OnValidSubmit="OnSubmit">
+                <DataAnnotationsValidator/>
+                <div class="main">
+                    <div class="form">
+                        <fieldset class="username">
+                            <label>username</label>
+                            <InputText autofocus @bind-Value="RegisterRequest.Username" />
+                            @*<ValidationMessage For="@(() => RegisterRequest.Username)"/>*@
+                        </fieldset>
+
+                        <fieldset class="password">
+                            <label>password</label>
+                            <InputText type="password" @bind-Value="RegisterRequest.Password" />
+                            @*<ValidationMessage For="@(() => RegisterRequest.Password)" />*@
+                        </fieldset>
+
+                        <fieldset class="confirm-password">
+                            <label>confirm password</label>
+                            <InputText type="password" @bind-Value="RegisterRequest.ConfirmPassword" />
+                            @*<ValidationMessage For="@(() => RegisterRequest.ConfirmPassword)" />*@
+                        </fieldset>
+                    </div>
+
+                    <ValidationSummary/>
+
+                    <p class="error">@Error</p>
+
+                    <div class="buttons">
+                        <button class="signup" type="submit">submit</button>
+                        <button class="cancel" type="button" @onclick="OnCancel">cancel</button>
+                    </div>
+                </div>
+            </EditForm>
+    </NavDrop>
+</div>
+
+@code {
+
+    #region properties
+    public SignupRequest RegisterRequest { get; set; } = new SignupRequest();
+    public string? Error { get; set; }
+
+    [Parameter]
+    public EventCallback<SignupRequest> RegisterNewUser { get; set; }
+
+    [Parameter]
+    public EventCallback CancelSignup { get; set; }
+    #endregion
+
+    #region methods
+    public async Task OnSubmit()
+    {
+        try
+        {
+            await RegisterNewUser.InvokeAsync(RegisterRequest);
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+        }
+    }
+
+    public void OnCancel()
+    {
+        CancelSignup.InvokeAsync();
+    }
+    #endregion
+}

@@ -1,0 +1,7 @@
+﻿.container {
+    background-color: var(--extra-color);
+}
+
+main {
+    margin-top: 20px;
+}

@@ -1,0 +1,16 @@
+﻿
+<div class="container">
+    <main>
+        @ChildContent
+    </main>
+</div>
+
+@code {
+
+    #region properties
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    #endregion
+
+}
+

@@ -1,0 +1,94 @@
+﻿@page "/playground"
+
+<div class="container">
+    <header>
+        <div id="quit-btn">
+            <span id="text">quit</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="113" height="25" viewBox="0 0 113 25">
+              <defs>
+                <style>
+                  .cls-1, .cls-2, .cls-4 {
+                    fill: none;
+                  }
+
+                  .cls-1 {
+                    stroke: #000;
+                    stroke-width: 2px;
+                  }
+
+                  .cls-3, .cls-5 {
+                    stroke: none;
+                  }
+
+                  .cls-5 {
+                    fill: #000;
+                  }
+                </style>
+              </defs>
+              <g id="Group_14" data-name="Group 14" transform="translate(-92 -73)">
+                <g id="Rectangle_7" data-name="Rectangle 7" class="cls-1" transform="translate(123 82)">
+                  <rect class="cls-3" width="82" height="8"/>
+                  <rect class="cls-4" x="1" y="1" width="80" height="6"/>
+                </g>
+                <g id="Polygon_3" data-name="Polygon 3" class="cls-2" transform="translate(92 98) rotate(-90)">
+                  <path class="cls-3" d="M12.5,0,25,35H0Z"/>
+                  <path class="cls-5" d="M 12.5 8.919654846191406 L 4.25701904296875 32 L 20.74298095703125 32 L 12.5 8.919654846191406 M 12.5 0 L 25 35 L 0 35 L 12.5 0 Z"/>
+                </g>
+              </g>
+            </svg>
+
+        </div>
+
+        <div id="score-box">
+            <div>possible score <span id="possible-score">12</span></div>
+            <div>total score <span id="total-score">0</span></div>
+        </div>
+
+        <nav>
+            <button>
+                <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 46.019 52.593">
+                    <path id="Icon_awesome-book" data-name="Icon awesome-book" d="M46.019,36.98V2.465A2.459,2.459,0,0,0,43.554,0H9.861A9.864,9.864,0,0,0,0,9.861V42.732a9.864,9.864,0,0,0,9.861,9.861H43.554a2.459,2.459,0,0,0,2.465-2.465V48.484a2.484,2.484,0,0,0-.914-1.921,22.908,22.908,0,0,1,0-7.673A2.448,2.448,0,0,0,46.019,36.98ZM13.148,13.765a.618.618,0,0,1,.616-.616H35.542a.618.618,0,0,1,.616.616v2.054a.618.618,0,0,1-.616.616H13.765a.618.618,0,0,1-.616-.616Zm0,6.574a.618.618,0,0,1,.616-.616H35.542a.618.618,0,0,1,.616.616v2.054a.618.618,0,0,1-.616.616H13.765a.618.618,0,0,1-.616-.616Zm26.03,25.68H9.861a3.287,3.287,0,1,1,0-6.574H39.178A36.981,36.981,0,0,0,39.178,46.019Z" />
+                </svg>
+            </button>
+
+            <button>
+                <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 54.101 54.101">
+                    <path id="Icon_awesome-question-circle" data-name="Icon awesome-question-circle" d="M54.664,27.613A27.051,27.051,0,1,1,27.613.563,27.049,27.049,0,0,1,54.664,27.613ZM28.339,9.507c-5.944,0-9.736,2.5-12.713,6.954a1.311,1.311,0,0,0,.3,1.773l3.785,2.87a1.308,1.308,0,0,0,1.818-.231c1.949-2.471,3.285-3.9,6.25-3.9,2.228,0,4.985,1.434,4.985,3.595,0,1.634-1.348,2.472-3.549,3.706-2.566,1.438-5.961,3.229-5.961,7.707v.436a1.309,1.309,0,0,0,1.309,1.309h6.108a1.309,1.309,0,0,0,1.309-1.309v-.145c0-3.1,9.074-3.234,9.074-11.635C41.05,14.306,34.487,9.507,28.339,9.507Zm-.726,27.051a5.017,5.017,0,1,0,5.017,5.017A5.023,5.023,0,0,0,27.613,36.557Z" transform="translate(-0.563 -0.563)" />
+                </svg>
+            </button>
+
+            <button>
+                <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 72.417 46.083">
+                    <path id="Icon_material-people" data-name="Icon material-people" d="M50.875,27.25A9.875,9.875,0,1,0,41,17.375,9.834,9.834,0,0,0,50.875,27.25Zm-26.333,0a9.875,9.875,0,1,0-9.875-9.875A9.834,9.834,0,0,0,24.542,27.25Zm0,6.583c-7.67,0-23.042,3.851-23.042,11.521v8.229H47.583V45.354C47.583,37.685,32.211,33.833,24.542,33.833Zm26.333,0c-.955,0-2.041.066-3.193.165,3.818,2.765,6.485,6.485,6.485,11.356v8.229h19.75V45.354C73.917,37.685,58.545,33.833,50.875,33.833Z" transform="translate(-1.5 -7.5)" />
+                </svg>
+            </button>
+
+            <button>
+                <svg class="btn-svg" id="Icon_feather-settings" data-name="Icon feather-settings" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49.042 49.042">
+                    <defs>
+                        <style>
+                            .cls-1 {
+                                fill: none;
+                                stroke: #000;
+                                stroke-linecap: round;
+                                stroke-linejoin: round;
+                                stroke-width: 3px;
+                            }
+                        </style>
+                    </defs>
+                    <path id="Path_1" data-name="Path 1" class="cls-1" d="M26.057,19.778A6.278,6.278,0,1,1,19.778,13.5,6.278,6.278,0,0,1,26.057,19.778Z" transform="translate(4.742 4.742)" />
+                    <path id="Path_2" data-name="Path 2" class="cls-1" d="M40.008,30.8a3.453,3.453,0,0,0,.691,3.809l.126.126A4.188,4.188,0,1,1,34.9,40.656l-.126-.126a3.481,3.481,0,0,0-5.9,2.47v.356a4.186,4.186,0,0,1-8.371,0v-.188a3.453,3.453,0,0,0-2.26-3.16,3.453,3.453,0,0,0-3.809.691l-.126.126A4.188,4.188,0,1,1,8.385,34.9l.126-.126a3.481,3.481,0,0,0-2.47-5.9H5.686a4.186,4.186,0,1,1,0-8.371h.188a3.453,3.453,0,0,0,3.16-2.26,3.453,3.453,0,0,0-.691-3.809l-.126-.126a4.188,4.188,0,1,1,5.923-5.923l.126.126a3.453,3.453,0,0,0,3.809.691h.167a3.453,3.453,0,0,0,2.093-3.16V5.686a4.186,4.186,0,1,1,8.371,0v.188a3.481,3.481,0,0,0,5.9,2.47l.126-.126a4.188,4.188,0,1,1,5.923,5.923l-.126.126a3.453,3.453,0,0,0-.691,3.809v.167A3.453,3.453,0,0,0,43,20.335h.356a4.186,4.186,0,0,1,0,8.371h-.188a3.453,3.453,0,0,0-3.16,2.093Z" transform="translate(0 0)" />
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <WordDisplay/>
+    </main>
+</div>
+
+
+@code {
+
+}

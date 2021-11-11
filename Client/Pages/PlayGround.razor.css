@@ -1,0 +1,70 @@
+﻿.container {
+    background-color: var(--tertiary-color);
+    height: 100%;
+    padding: 20px 50px 0px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#quit-btn {
+    display: flex;
+    flex-direction: column;
+}
+
+#quit-btn #text {
+    color: var(--secondary-color);
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: -8px;
+}
+
+#score-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 3px var(--secondary-color) solid;
+    padding: 10px;
+    border-radius: 15px;
+    min-width: 150px;
+    color: var(--primary-color);
+    margin-right: -200px;
+}
+
+#score-box div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: 500;
+}
+
+#score-box :first-child {
+    margin-bottom: 5px;
+}
+
+#score-box #possible-score {
+    color: var(--secondary-color);
+}
+
+#score-box #possible-score, #total-score {
+    font-weight: normal;
+}
+
+
+nav button {
+    all: unset;
+    margin-left: 80px;
+}
+
+.btn-svg {
+    width: 30px;
+    height: 30px;
+}
+
+main {
+    height: 60%;
+}

@@ -1,0 +1,26 @@
+﻿
+<div class="container">
+    <NavDrop>
+        <p>
+            Hi, welcome to Word Jumble, a word game where you can have fun and relax, solving word puzzles.
+        </p>
+
+        <button class="close" @onclick="OnClose">close</button>
+    </NavDrop>
+</div>
+
+@code {
+
+    #region properties
+    [Parameter]
+    public EventCallback CloseAbout { get; set; }
+    #endregion
+
+    #region methods
+    public void OnClose()
+    {
+        CloseAbout.InvokeAsync();
+    }
+    #endregion
+
+}

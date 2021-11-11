@@ -1,0 +1,72 @@
+﻿
+<div class="container">
+    <NavDrop>
+        <EditForm Model="SigninRequest" OnValidSubmit="OnSubmit">
+            <DataAnnotationsValidator/>
+
+            <div class="main">
+                <div class="form">
+                    <fieldset class="username">
+                        <label>username</label>
+                        <InputText autofocus @bind-Value="SigninRequest.Username" />
+                    </fieldset>
+
+                    <fieldset class="password">
+                        <label>password</label>
+                        <InputText type="password" @bind-Value="SigninRequest.Password" />
+                    </fieldset>
+
+                    <fieldset class="remember-me">
+                        <label>remember me</label>
+                        <InputCheckbox @bind-Value="SigninRequest.RememberMe" id="check-rem-me" style="width: 20px; height: 20px" />
+                    </fieldset>
+                </div>
+
+                <ValidationSummary />
+
+                @if (Error != null)
+                {
+                    <p id="error">@Error</p>
+                }
+
+                <div class="buttons">
+                    <button class="login" type="submit">login</button>
+                    <button class="cancel" type="button" @onclick="OnCancel">cancel</button>
+                </div>
+            </div>
+        </EditForm>
+    </NavDrop>
+</div>
+
+@code {
+
+    #region properties
+    public LoginRequest SigninRequest { get; set; } = new LoginRequest();
+    public string? Error { get; set; }
+
+    [Parameter]
+    public EventCallback<LoginRequest> LoginUser { get; set; }
+
+    [Parameter]
+    public EventCallback CancelLogin { get; set; }
+    #endregion
+
+    #region methods
+    public async Task OnSubmit()
+    {
+        try
+        {
+            await LoginUser.InvokeAsync(SigninRequest);
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+        }
+    }
+
+    public void OnCancel()
+    {
+        CancelLogin.InvokeAsync();
+    }
+    #endregion
+}
