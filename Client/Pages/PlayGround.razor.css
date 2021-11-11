@@ -66,5 +66,53 @@ nav button {
 }
 
 main {
-    height: 60%;
+    height: 52%;
+}
+
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.buttons div {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .buttons button {
+        all: unset;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: var(--secondary-color);
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 20px;
+        font-style: italic;
+        box-shadow: 10px 8px 3px rgb(255, 74, 235, 0.55);
+    }
+
+footer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+footer .logo {
+    visibility: hidden;
+}
+
+footer button {
+    all: unset;
+    text-align: center;
+    font-weight: bold;
+    color: var(--secondary-color);
+    background-color: var(--primary-color);
+    width: 250px;
+    height: 60px;
+    border-radius: 15px;
+    font-size: 22px;
 }
