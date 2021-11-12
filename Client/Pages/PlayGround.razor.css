@@ -70,6 +70,31 @@ main {
 }
 
 
+.word-display {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto 0px;
+    height: 100%;
+}
+
+.letter-box {
+    background-color: var(--primary-color);
+    /*width: 315px;
+    height: 315px;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 28px;
+    box-shadow: 20px 20px 3px 3px #0000004e;
+}
+
+.letter {
+    color: var(--tertiary-color);
+    /*font-size: 220px;*/
+}
+
+
 .buttons {
     display: flex;
     justify-content: center;

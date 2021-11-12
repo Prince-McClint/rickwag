@@ -84,7 +84,23 @@
     </header>
 
     <main>
-        <WordDisplay/>
+        <div class="word-display">
+    
+            @if (WordAsList != null)
+            {
+                @foreach (var letter in WordAsList)
+                {
+                    <div class="letter-box" style="width:@(BoxSize)px; height:@(BoxSize)px">
+                        <span class="letter" style="font-size: @(LetterSize)px">@letter</span>
+                    </div>
+                }
+            }
+            else
+            {
+                <h1>No Word List</h1>
+            }
+
+        </div>
     </main>
 
     <div class="buttons">
@@ -115,5 +131,93 @@
 
 
 @code {
+    #region fields
+    public Random rand = new Random();
+    #endregion
 
+    #region properties
+    public string Word { get; set; } = "pat";
+    public List<string>? WordAsList { get; set; }
+    public string BoxSize
+    {
+        get
+        {
+            return GetBoxSize(Word.Length);
+
+        }
+    }
+    public string LetterSize
+    {
+        get
+        {
+            return GetLetterSize(Int32.Parse(BoxSize));
+        }
+    }
+    #endregion
+
+    #region methods
+    protected override void OnInitialized()
+    {
+        WordAsList = ShuffleList(WordToList(Word));
+    }
+
+    public List<string> WordToList(string word)
+    {
+        word = word.ToUpper();
+        var letterList = new List<string>();
+
+        foreach (var letter in word)
+        {
+            letterList.Add(letter.ToString());
+        }
+
+        return letterList;
+    }
+
+    public List<T> ShuffleList<T>(List<T> list)
+    {
+        var result = list.OrderBy(item => rand.Next());
+
+        return result.ToList<T>();
+    }
+
+    public string MergeListToString(List<string> list)
+    {
+        return String.Join("", list);
+    }
+
+    public string GetBoxSize(int letterCount)
+    {
+        var startSize = 315;
+        var decrementSize = 35;
+        var boxSize = startSize;
+
+        var startCount = 3;
+
+        while (startCount < 10)
+        {
+            if (startCount == letterCount) break;
+
+            boxSize -= decrementSize;
+            startCount++;
+        }
+
+        return boxSize.ToString();
+    }
+
+    public string GetLetterSize(int letterBoxSize)
+    {
+        var decrementSize = 60;
+
+        return (letterBoxSize - decrementSize).ToString();
+    }
+
+    public void ListToConsole<T>(List<T> list)
+    {
+        foreach (var item in list)
+        {
+            Console.WriteLine(item);
+        }
+    }
+    #endregion
 }
