@@ -1,0 +1,48 @@
+﻿
+<div class="letter-box"
+     style="width:@(BoxSize)px; height:@(BoxSize)px"
+     draggable="true"
+     ondragover="event.preventDefault()"
+     @ondragstart="OnDragStart"
+     @ondrop="OnDragDrop">
+
+    <span class="letter" style="font-size: @(LetterSize)px">@Letter</span>
+
+</div>
+
+@code {
+    #region properties
+    [Parameter]
+    public int Index { get; set; }
+
+    [Parameter]
+    public string? Letter { get; set; }
+
+    [Parameter]
+    public string? BoxSize { get; set; }
+
+    [Parameter]
+    public string? LetterSize { get; set; }
+
+    [Parameter]
+    public List<string>? WordAsList { get; set; }
+
+    [Parameter]
+    public EventCallback<int> DragStartEvent { get; set; }
+
+    [Parameter]
+    public EventCallback<int> DragDropEvent { get; set; }
+    #endregion
+
+    #region methods
+    public void OnDragStart()
+    {
+        DragStartEvent.InvokeAsync(Index);
+    }
+
+    public void OnDragDrop()
+    {
+        DragDropEvent.InvokeAsync(Index);
+    }
+    #endregion
+}

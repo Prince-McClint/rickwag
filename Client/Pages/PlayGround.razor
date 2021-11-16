@@ -88,11 +88,15 @@
     
             @if (WordAsList != null)
             {
-                @foreach (var letter in WordAsList)
+                @for (var i = 0; i < WordAsList.Count; i++)
                 {
-                    <div class="letter-box" style="width:@(BoxSize)px; height:@(BoxSize)px">
-                        <span class="letter" style="font-size: @(LetterSize)px">@letter</span>
-                    </div>
+                    <LetterBox Index=i
+                                Letter=@WordAsList[i]
+                                BoxSize=@BoxSize
+                                LetterSize=@LetterSize
+                                WordAsList=WordAsList
+                                DragStartEvent=OnDragStart
+                                DragDropEvent=OnDragDrop/>
                 }
             }
             else
@@ -106,7 +110,7 @@
     <div class="buttons">
         <div>
             <button id="peak">peak</button>
-            <button id="shuffle">shuffle</button>
+            <button id="shuffle" @onclick="OnShuffleClick">shuffle</button>
             <button id="reveal">reveal</button>
         </div>
     </div>
@@ -132,11 +136,12 @@
 
 @code {
     #region fields
-    public Random rand = new Random();
+    private Random rand = new Random();
+    private int currentDraggedIndex;
     #endregion
 
     #region properties
-    public string Word { get; set; } = "pat";
+    public string Word { get; set; } = "word";
     public List<string>? WordAsList { get; set; }
     public string BoxSize
     {
@@ -218,6 +223,31 @@
         {
             Console.WriteLine(item);
         }
+    }
+
+    public void SwapLetters(int firstIndex, int secondIndex)
+    {
+        var firstLetter = WordAsList[firstIndex];
+        WordAsList[firstIndex] = WordAsList[secondIndex];
+        WordAsList[secondIndex] = firstLetter;
+    }
+
+    public void OnDragStart(int draggedIndex)
+    {
+        currentDraggedIndex = draggedIndex;
+
+        Console.WriteLine($"current dragged index => {currentDraggedIndex}");
+    }
+
+    public void OnDragDrop(int dropIndex)
+    {
+        SwapLetters(currentDraggedIndex, dropIndex);
+        Console.WriteLine($"drop index => {dropIndex}");
+    }
+
+    public void OnShuffleClick()
+    {
+        WordAsList = ShuffleList(WordToList(Word));
     }
     #endregion
 }
