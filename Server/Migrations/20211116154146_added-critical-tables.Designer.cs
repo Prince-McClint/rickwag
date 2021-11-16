@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WordJumble.Server.Models;
 
@@ -11,9 +12,10 @@ using WordJumble.Server.Models;
 namespace WordJumble.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211116154146_added-critical-tables")]
+    partial class addedcriticaltables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,12 +234,7 @@ namespace WordJumble.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("DictionaryID");
-
-                    b.HasIndex("PlayerId");
 
                     b.ToTable("Dictionaries");
                 });
@@ -250,9 +247,6 @@ namespace WordJumble.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScoreID"), 1L, 1);
 
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("ScoreValue")
                         .HasColumnType("int");
 
@@ -260,8 +254,6 @@ namespace WordJumble.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScoreID");
-
-                    b.HasIndex("PlayerId");
 
                     b.HasIndex("WordID");
 
@@ -344,19 +336,8 @@ namespace WordJumble.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
-                {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
-                        .WithMany("Dictionaries")
-                        .HasForeignKey("PlayerId");
-                });
-
             modelBuilder.Entity("WordJumble.Shared.Score", b =>
                 {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
-                        .WithMany("Scores")
-                        .HasForeignKey("PlayerId");
-
                     b.HasOne("WordJumble.Shared.Word", null)
                         .WithMany("Scores")
                         .HasForeignKey("WordID");
@@ -367,13 +348,6 @@ namespace WordJumble.Server.Migrations
                     b.HasOne("WordJumble.Shared.Dictionary", null)
                         .WithMany("Words")
                         .HasForeignKey("DictionaryID");
-                });
-
-            modelBuilder.Entity("WordJumble.Server.Models.Player", b =>
-                {
-                    b.Navigation("Dictionaries");
-
-                    b.Navigation("Scores");
                 });
 
             modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
