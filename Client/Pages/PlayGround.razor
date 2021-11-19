@@ -1,5 +1,7 @@
 ﻿@page "/playground"
 
+@inject IWordService WordService
+
 <div class="container">
     <header>
         <div id="quit-btn">
@@ -45,7 +47,7 @@
         </div>
 
         <nav>
-            <button>
+            <button @onclick="OnMeaningClick">
                 <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 46.019 52.593">
                     <path id="Icon_awesome-book" data-name="Icon awesome-book" d="M46.019,36.98V2.465A2.459,2.459,0,0,0,43.554,0H9.861A9.864,9.864,0,0,0,0,9.861V42.732a9.864,9.864,0,0,0,9.861,9.861H43.554a2.459,2.459,0,0,0,2.465-2.465V48.484a2.484,2.484,0,0,0-.914-1.921,22.908,22.908,0,0,1,0-7.673A2.448,2.448,0,0,0,46.019,36.98ZM13.148,13.765a.618.618,0,0,1,.616-.616H35.542a.618.618,0,0,1,.616.616v2.054a.618.618,0,0,1-.616.616H13.765a.618.618,0,0,1-.616-.616Zm0,6.574a.618.618,0,0,1,.616-.616H35.542a.618.618,0,0,1,.616.616v2.054a.618.618,0,0,1-.616.616H13.765a.618.618,0,0,1-.616-.616Zm26.03,25.68H9.861a3.287,3.287,0,1,1,0-6.574H39.178A36.981,36.981,0,0,0,39.178,46.019Z" />
                 </svg>
@@ -127,7 +129,7 @@
           <path id="Icon_simple-letterboxd" data-name="Icon simple-letterboxd" class="logo" d="M20.807,42.045V18.071H16.43V12.047H32.312v6.024H27.93V42.1h9.851V35.53h7.126V48.19H16.427V42.045h4.382ZM0,30.119A30.119,30.119,0,1,0,30.119,0,30.117,30.117,0,0,0,0,30.119Z"/>
         </svg>
 
-        <button>
+        <button @onclick="OnSubmitClick">
             <span id="text">submit</span>
         </button>
     </footer>
@@ -141,13 +143,13 @@
     #endregion
 
     #region properties
-    public string Word { get; set; } = "word";
+    public string? CurrentWord { get; set; }
     public List<string>? WordAsList { get; set; }
     public string BoxSize
     {
         get
         {
-            return GetBoxSize(Word.Length);
+            return GetBoxSize(CurrentWord.Length);
 
         }
     }
@@ -161,9 +163,18 @@
     #endregion
 
     #region methods
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        WordAsList = ShuffleList(WordToList(Word));
+        await WordService.SetCurrentDictionary();
+
+        GetCurrentWord();
+    }
+
+    public void GetCurrentWord()
+    {
+        CurrentWord = WordService.GetNextWord().WordContent;
+
+        WordAsList = ShuffleList(WordToList(CurrentWord));
     }
 
     public List<string> WordToList(string word)
@@ -247,7 +258,18 @@
 
     public void OnShuffleClick()
     {
-        WordAsList = ShuffleList(WordToList(Word));
+        if (CurrentWord != null)
+            WordAsList = ShuffleList(WordToList(CurrentWord));
+    }
+
+    public void OnSubmitClick()
+    {
+        GetCurrentWord();
+    }
+
+    public void OnMeaningClick()
+    {
+        WordService.GetWordMeaning("nigro");
     }
     #endregion
 }

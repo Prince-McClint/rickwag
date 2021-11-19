@@ -18,5 +18,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<MyAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<MyAuthenticationStateProvider>());
 
+builder.Services.AddScoped<IWordService, WordService>();
 
 await builder.Build().RunAsync();
