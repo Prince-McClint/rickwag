@@ -1,0 +1,50 @@
+@page "/dashboard"
+
+@attribute [Authorize]
+
+@inject NavigationManager NavManager
+
+<div class="content">
+    <h1>Welcome @CurrentPlayer?.Username</h1>
+    <h3>have fun</h3>
+    <button class="play-btn" @onclick="GoToPlayGround">play game</button>
+</div>
+
+@if (chooseDicVisible)
+{
+    <ChooseDictionary OnChooseDictionary="OnChooseDictionary" />
+}
+
+@code {
+    #region fields
+    private bool chooseDicVisible = false;
+    #endregion
+
+    #region properties
+    public CurrentUser? CurrentPlayer { get; set; }
+    #endregion
+
+    #region methods
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPlayer = await AuthStateProvider.GetCurrentUser();
+    }
+
+    private void ToggleChooseDic()
+    {
+        chooseDicVisible = chooseDicVisible == true ? false : true;
+    }
+
+    public void GoToPlayGround()
+    {
+        ToggleChooseDic();
+    }
+
+    public void OnChooseDictionary()
+    {
+        ToggleChooseDic();
+        NavManager.NavigateTo("/playground");
+    }
+    #endregion
+}

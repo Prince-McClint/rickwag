@@ -5,37 +5,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <div class="container">
-            <header>
-                <span class="oi oi-play-circle logo" />
-
-                <nav class="nav-buttons">
-                    <ul>
-                        <li><button class="nav-btn" @onclick="Logout">logout</button></li>
-                        <li><button class="nav-btn" @onclick="OnAboutClick">about</button></li>
-                    </ul>
-                </nav>
-            </header>
-
-            <main>
-                <div class="title">
-                    <h1>Word Jumble</h1>
-                    <h4>words can play</h4>
-                </div>
-
-                <div class="content">
-                    <button class="play-btn" @onclick="GoToPlayGround">play game</button>
-                </div>
-            </main>
-
-            <div class="nav-show-about">
-                @if (aboutVisible)
-                {
-                    <AboutDropDown CloseAbout="ToggleAbout" />
-                }
-            </div>
-
-        </div>
+        <RedirectToPage PagePath="/dashboard" />
     </Authorized>
 
     <NotAuthorized>
@@ -184,11 +154,8 @@
     {
         await AuthStateProvider.Login(loginRequest);
         ToggleLogin();
-    }
 
-    public async Task Logout()
-    {
-        await AuthStateProvider.Logout();
+        NavManager.NavigateTo("/dashboard");
     }
     #endregion
 

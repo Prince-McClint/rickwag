@@ -1,0 +1,14 @@
+@inject NavigationManager NavManager
+
+@code {
+
+    [Parameter]
+    public string PagePath { get; set; } = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        NavManager.NavigateTo(PagePath);
+
+        return base.OnInitializedAsync();
+    }
+}

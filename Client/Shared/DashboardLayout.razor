@@ -1,0 +1,65 @@
+@inherits LayoutComponentBase
+
+@inject MyAuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+
+<div class="container">
+
+    <div class="sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 60.237 60.237">
+            <defs>
+                <style>
+                    .logo {
+                        fill: #ec87e4;
+                    }
+                </style>
+            </defs>
+            <path id="Icon_simple-letterboxd" data-name="Icon simple-letterboxd" class="logo"
+                d="M20.807,42.045V18.071H16.43V12.047H32.312v6.024H27.93V42.1h9.851V35.53h7.126V48.19H16.427V42.045h4.382ZM0,30.119A30.119,30.119,0,1,0,30.119,0,30.117,30.117,0,0,0,0,30.119Z" />
+        </svg>
+
+        <nav>
+            <NavLink href="/dashboard"
+                style="text-decoration: none; border-top: 3px solid var(--tertiary-color); border-bottom: 3px solid var(--tertiary-color); font-size: 24px; padding: 10px; margin-bottom: 40px; color: var(--secondary-color);"
+                ActiveClass="nav-active">
+                Home
+            </NavLink>
+
+            <NavLink href="#"
+                style="text-decoration: none; border-top: 3px solid var(--tertiary-color); border-bottom: 3px solid var(--tertiary-color); font-size: 24px; padding: 10px; margin-bottom: 40px; color: var(--secondary-color);">
+                Dictionaries
+            </NavLink>
+
+            <NavLink href="#"
+                style="text-decoration: none; border-top: 3px solid var(--tertiary-color); border-bottom: 3px solid var(--tertiary-color); font-size: 24px; padding: 10px; margin-bottom: 40px; color: var(--secondary-color);">
+                Leaderboards
+            </NavLink>
+
+            <NavLink href="#"
+                style="text-decoration: none; border-top: 3px solid var(--tertiary-color); border-bottom: 3px solid var(--tertiary-color); font-size: 24px; padding: 10px; margin-bottom: 40px; color: var(--secondary-color);">
+                Profile
+            </NavLink>
+        </nav>
+    </div>
+
+    <div class="content">
+        <nav class="top-nav">
+            <button @onclick="OnLogoutClick">logout</button>
+        </nav>
+
+        <main>
+            @Body
+        </main>
+    </div>
+
+</div>
+
+@code
+{
+    public async Task OnLogoutClick()
+    {
+        await AuthStateProvider.Logout();
+
+        NavManager.NavigateTo("");
+    }
+}
