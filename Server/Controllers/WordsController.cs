@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 using WordJumble.Server.Models;
 using WordJumble.Shared;
@@ -11,12 +12,14 @@ namespace WordJumble.Server.Controllers
     {
         #region fields
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Player> _userManager;
         #endregion
 
         #region methods
-        public WordsController(ApplicationDbContext context)
+        public WordsController(ApplicationDbContext context, UserManager<Player> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -28,8 +31,29 @@ namespace WordJumble.Server.Controllers
         [HttpGet]
         public Dictionary GetDictionary(int id)
         {
-            Console.WriteLine("in controller getting dictionary");
-            return _context.Dictionaries.First();
+            var dictionary = _context.Dictionaries.First();
+
+
+            return dictionary;
+        }
+
+        [HttpGet]
+        public IList<Dictionary> GetDictionaries()
+        {
+            return _context.Dictionaries.ToArray();
+        }
+
+        [HttpGet]
+        public Dictionary<string, List<Dictionary>> GetUserDictionaries()
+        {
+            var userDictionary = new Dictionary<string, List<Dictionary>>();
+
+            foreach (var user in _userManager.Users)
+            {
+                userDictionary.Add(user.UserName, user.Dictionaries);
+            }
+
+            return userDictionary;
         }
 
         [HttpGet]

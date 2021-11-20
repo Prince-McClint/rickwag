@@ -31,7 +31,7 @@
             <div class="nav-show-about">
                 @if (aboutVisible)
                 {
-                    <AboutDropDown CloseAbout="ToggleAbout"/>
+                    <AboutDropDown CloseAbout="ToggleAbout" />
                 }
             </div>
 
@@ -39,52 +39,59 @@
     </Authorized>
 
     <NotAuthorized>
-        <div class="container">
-            <header>
-                <span class="oi oi-play-circle logo" />
+        <div class="all-content">
+            <div class="container">
+                <header>
+                    <span class="oi oi-play-circle logo" />
 
-                <nav class="nav-buttons">
-                    <ul>
-                        <li><button class="nav-btn" @onclick="OnLoginClick">login</button></li>
-                        <li><button class="nav-btn" @onclick="OnSignupClick">signup</button></li>
-                        <li><button class="nav-btn" @onclick="OnAboutClick">about</button></li>
-                    </ul>
-                </nav>
-            </header>
+                    <nav class="nav-buttons">
+                        <ul>
+                            <li><button class="nav-btn" @onclick="OnLoginClick">login</button></li>
+                            <li><button class="nav-btn" @onclick="OnSignupClick">signup</button></li>
+                            <li><button class="nav-btn" @onclick="OnAboutClick">about</button></li>
+                        </ul>
+                    </nav>
+                </header>
 
-            <main>
-                <div class="title">
-                    <h1>Word Jumble</h1>
-                    <h4>words can play</h4>
+                <main>
+                    <div class="title">
+                        <h1>Word Jumble</h1>
+                        <h4>words can play</h4>
+                    </div>
+
+                    <div class="content">
+                        <button class="play-btn" @onclick="GoToPlayGround">play game</button>
+                    </div>
+                </main>
+
+                <div class="nav-show-login">
+                    @if (loginVisible)
+                    {
+                        <LoginDropDown LoginUser="LoginUser" CancelLogin="ToggleLogin" />
+                    }
                 </div>
 
-                <div class="content">
-                    <button class="play-btn" @onclick="GoToPlayGround">play game</button>
+                <div class="nav-show-signup">
+                    @if (signupVisible)
+                    {
+                        <SignupDropDown RegisterNewUser="SignupNewUser" CancelSignup="ToggleSignup" />
+                    }
                 </div>
-            </main>
 
-            <div class="nav-show-login">
-                @if (loginVisible)
-                {
-                    <LoginDropDown LoginUser="LoginUser" CancelLogin="ToggleLogin"/>
-                }
+                <div class="nav-show-about">
+                    @if (aboutVisible)
+                    {
+                        <AboutDropDown CloseAbout="ToggleAbout" />
+                    }
+                </div>
             </div>
-
-            <div class="nav-show-signup">
-                @if (signupVisible)
-                {
-                    <SignupDropDown RegisterNewUser="SignupNewUser" CancelSignup="ToggleSignup"/>
-                }
-            </div>
-
-            <div class="nav-show-about">
-                @if (aboutVisible)
-                {
-                    <AboutDropDown CloseAbout="ToggleAbout"/>
-                }
-            </div>
-
         </div>
+
+        @if (chooseDicVisible)
+        {
+            <ChooseDictionary OnChooseDictionary="OnChooseDictionary" />
+        }
+
     </NotAuthorized>
 </AuthorizeView>
 
@@ -94,6 +101,7 @@
     private bool loginVisible = false;
     private bool signupVisible = false;
     private bool aboutVisible = false;
+    private bool chooseDicVisible = false;
     #endregion
 
     #region methods
@@ -117,6 +125,11 @@
         aboutVisible = aboutVisible == true ? false : true;
     }
 
+    private void ToggleChooseDic()
+    {
+        chooseDicVisible = chooseDicVisible == true ? false : true;
+    }
+
     private void ResetNav(string exception)
     {
         //resets all the nav buttons to false except exception
@@ -135,6 +148,12 @@
         {
             loginVisible = false;
             signupVisible = false;
+        }
+        else
+        {
+            loginVisible = false;
+            signupVisible = false;
+            aboutVisible = false;
         }
     }
 
@@ -175,7 +194,14 @@
 
     public void GoToPlayGround()
     {
-        NavManager.NavigateTo("playground");
+        ToggleChooseDic();
+        //NavManager.NavigateTo($"playground");
+    }
+
+    public void OnChooseDictionary()
+    {
+        ToggleChooseDic();
+        NavManager.NavigateTo($"playground");
     }
 
     #endregion

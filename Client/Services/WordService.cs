@@ -12,7 +12,8 @@ namespace WordJumble.Client.Services
         #endregion
 
         #region properties
-        public List<Word> CurrentWords { get; set; }
+        public List<Word> CurrentWords { get; set; } = new List<Word>();
+        public Dictionary CurrentDictionary { get; set; }
         #endregion
 
         #region methods
@@ -28,16 +29,23 @@ namespace WordJumble.Client.Services
             return await _httpClient.GetFromJsonAsync<List<Word>>(requestUri);
         }
 
-        public async Task SetCurrentDictionary()
+        public async Task SetCurrentDictionary(Dictionary dictionary)
         {
-            CurrentWords = await GetWords();
+            CurrentDictionary = dictionary;
+            SetCurrentWords();
+        }
 
-            Console.WriteLine($"count => {CurrentWords.Count}");
+        private void SetCurrentWords()
+        {
+            CurrentWords = CurrentDictionary.Words;
         }
 
         public Word GetNextWord()
         {
-            return CurrentWords[currentWordCount++];
+            //check later
+            if (!CurrentWords.Any()) return null;
+
+            return CurrentWords[currentWordCount != CurrentWords.Count - 1 ? currentWordCount++ : currentWordCount = 0];
         }
 
         public async Task<Dictionary> GetDictionary(int DictionaryID)
@@ -71,6 +79,13 @@ namespace WordJumble.Client.Services
 
                 return body;
             }
+        }
+
+        public async Task<List<Dictionary>> GetDictionaries()
+        {
+            var requestUri = "api/words/GetDictionaries";
+
+            return await _httpClient.GetFromJsonAsync<List<Dictionary>>(requestUri);
         }
         #endregion
     }

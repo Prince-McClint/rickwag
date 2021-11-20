@@ -1,0 +1,47 @@
+@inject IWordService WordService
+
+<div class="container">
+    <h3>choose dictionary</h3>
+
+    <div class="dictionaries">
+        @if (Dictionaries.Any())
+        {
+            @foreach (var dictionary in Dictionaries)
+            {
+                <div class="dictionary" @onclick="@(() => OnChooseDictionaryClick(dictionary))">
+                    <span class="dictionary-name">@dictionary.DictionaryName</span>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Loading dictionaries...</p>
+        }
+    </div>
+</div>
+
+@code {
+
+    #region properties
+    //[Parameter]
+    public List<Dictionary> Dictionaries { get; set; } = new List<Dictionary>();
+
+    [Parameter]
+    public EventCallback OnChooseDictionary { get; set; }
+    #endregion
+
+    #region methods
+    protected override async Task OnInitializedAsync()
+    {
+        Dictionaries = await WordService.GetDictionaries();
+    }
+
+    public void OnChooseDictionaryClick(Dictionary dictionary)
+    {
+
+        WordService.SetCurrentDictionary(dictionary);
+
+        OnChooseDictionary.InvokeAsync();
+    }
+    #endregion
+}

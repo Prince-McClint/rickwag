@@ -6,7 +6,7 @@ namespace WordJumble.Server.Models
 {
     public class Player : IdentityUser
     {
-        public List<Score>? Scores { get; set; }
-        public List<Dictionary>? Dictionaries { get; set; }
+        public List<Score> Scores { get; set; }
+        public List<Dictionary> Dictionaries { get; set; }
     }
 }
