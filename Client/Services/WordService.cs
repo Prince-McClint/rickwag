@@ -91,8 +91,6 @@ namespace WordJumble.Client.Services
         {
             var requestUri = "api/words/AddDictionaryToCurrentPlayer";
 
-            Console.WriteLine($"posting {dictionary.DictionaryName}");
-
             await _httpClient.PostAsJsonAsync(requestUri, dictionary);
         }
 

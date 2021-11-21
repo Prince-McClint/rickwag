@@ -65,8 +65,15 @@ namespace WordJumble.Server.Controllers
             {
                 var player = await _userManager.FindByNameAsync(User.Identity.Name);
 
+                System.Console.WriteLine($"player {player.UserName} id is {player.Id}");
+
                 if (player.Dictionaries != null)
                     dictionaries = player.Dictionaries.ToArray();
+                else
+                    System.Console.WriteLine("player dictionaries is null");
+
+                var currentUser = _context.Users.First(user => user.Id == player.Id);
+                System.Console.WriteLine($"current user => {currentUser.Dictionaries}");
             }
 
             return dictionaries;
@@ -100,22 +107,24 @@ namespace WordJumble.Server.Controllers
         [HttpPost]
         public async Task AddDictionaryToCurrentPlayer(Dictionary dictionary)
         {
-            Console.WriteLine($"taking in {dictionary}");
+            var player = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            if (User.Identity.IsAuthenticated)
+            if (player.Dictionaries == null)
+                player.Dictionaries = new List<Dictionary>();
+
+            player.Dictionaries.Add(dictionary);
+
+            var result = await _userManager.UpdateAsync(player);
+
+            if (result.Succeeded)
+                System.Console.WriteLine("saved player");
+
+            IList<Dictionary> dictsInDb = _context.Dictionaries.ToArray();
+            System.Console.WriteLine($"dictionaries in db count {dictsInDb.Count}");
+
+            foreach (var dict in dictsInDb)
             {
-                var player = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                if (player.Dictionaries == null)
-                    player.Dictionaries = new List<Dictionary>();
-
-                player.Dictionaries.Add(dictionary);
-
-                await _userManager.UpdateAsync(player);
-
-                Console.WriteLine($"{dictionary.DictionaryName} dictionary counts => {player.Dictionaries.Count}");
-
-                Console.WriteLine("random stuff");
+                System.Console.WriteLine($"{dict.DictionaryName}");
             }
         }
         #endregion

@@ -150,9 +150,9 @@
 
             WordService.AddDictionaryToCurrentPlayer(dictionary);
 
-            ResetDictionary();
-
             Status = $"Saved {DictionaryOnEdit.DictionaryName}";
+
+            ResetDictionary();
         }
         else
             Status = $"sorry!! can't save dictionary without a name";
