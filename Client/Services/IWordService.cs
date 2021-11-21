@@ -10,5 +10,7 @@ namespace WordJumble.Client.Services
         public Task<Dictionary> GetDictionary(int ID);
         public Task<string> GetWordMeaning(string word);
         public Task<List<Dictionary>> GetDictionaries();
+        public Task AddDictionaryToCurrentPlayer(Dictionary dictionary);
+        public Task<List<Dictionary>> GetCurrentPlayerDictionaries();
     }
 }

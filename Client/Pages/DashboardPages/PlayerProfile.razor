@@ -1,0 +1,60 @@
+﻿@page "/dashboard/profile"
+
+@inject IAccountsService AccountService
+
+<div class="container">
+    <h1>Your Profile</h1>
+
+    <EditForm Model="Profile" OnValidSubmit="SavePlayerProfile">
+        <DataAnnotationsValidator />
+
+        <fieldset>
+            <label>username</label>
+            <InputText @bind-Value="Profile.Username" />
+        </fieldset>
+        <ValidationMessage For="@(() => Profile.Username)" />
+
+        <fieldset>
+            <label>current password</label>
+            <InputText type="password" @bind-Value="Profile.CurrentPassword" />
+        </fieldset>
+        <ValidationMessage For="@(() => Profile.CurrentPassword)" />
+
+        <fieldset>
+            <label>new password</label>
+            <InputText type="password" @bind-Value="Profile.Password" />
+        </fieldset>
+        <ValidationMessage For="@(() => Profile.Password)" />
+
+        <fieldset>
+            <label>confirm new password</label>
+            <InputText type="password" @bind-Value="Profile.ConfirmPassword" />
+        </fieldset>
+        <ValidationMessage For="@(() => Profile.ConfirmPassword)" />
+
+        <button type="submit">save</button>
+    </EditForm>
+
+</div>
+
+@code {
+    #region properties
+    public UserProfile Profile { get; set; } = new UserProfile();
+    #endregion
+
+    #region properties
+
+    protected override async Task OnInitializedAsync()
+    {
+        var currentUser = await AuthStateProvider.GetCurrentUser();
+
+        Profile.Username = currentUser.Username;
+        Profile.PreviousUsername = currentUser.Username;
+    }
+
+    private void SavePlayerProfile()
+    {
+        AccountService.SavePlayerProfile(Profile);
+    }
+    #endregion
+}

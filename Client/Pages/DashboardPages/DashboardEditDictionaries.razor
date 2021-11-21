@@ -1,0 +1,161 @@
+@page "/dashboard/dictionaries/edit"
+
+@attribute [Authorize]
+
+<div class="container">
+    <EditForm Model="DictionaryOnEdit" OnValidSubmit="OnSave">
+        <div class="dictionary-name">
+            <div>
+                <span class="name">dictionary name</span>
+                <InputText @bind-Value="DictionaryOnEdit.DictionaryName" />
+            </div>
+
+            <button type="submit">save</button>
+        </div>
+    </EditForm>
+
+    <div class="new-word">
+        <EditForm Model="NewWord" OnValidSubmit="OnNewWordSubmit">
+            <div class="word">
+                <span>word</span>
+                <InputText @bind-Value="NewWord.WordContent" />
+            </div>
+
+            <div class="meaning">
+                <span>meaning</span>
+                <InputText @bind-Value="NewWord.Meaning" />
+            </div>
+
+            <button>
+                <span class="plus-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 29.25 29.25">
+                        <defs>
+                            <style>
+                                .plus {
+                                    fill: #d3fbd8;
+                                }
+                            </style>
+                        </defs>
+                        <path id="Icon_ionic-md-add-circle" data-name="Icon ionic-md-add-circle" class="plus"
+                            d="M18,3.375A14.625,14.625,0,1,0,32.625,18,14.625,14.625,0,0,0,18,3.375Zm7.523,16.1H19.477v6.047H16.523V19.477H10.477V16.523h6.047V10.477h2.953v6.047h6.047Z"
+                            transform="translate(-3.375 -3.375)" />
+                    </svg>
+                </span>
+
+                <span class="name">add</span>
+            </button>
+        </EditForm>
+    </div>
+
+    <div class="word-list">
+        @foreach (var word in DictionaryOnEdit.Words)
+        {
+            <div class="word-in-list">
+                <span class="word">@word.WordContent</span>
+                <span class="meaning">=> @word.Meaning</span>
+                <button type="button" class="delete" @onclick=@(() => DeleteWord(word))>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 21 27">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #d3fbd8;
+                                }
+                            </style>
+                        </defs>
+                        <path id="Icon_material-delete" data-name="Icon material-delete" class="cls-1"
+                        d="M9,28.5a3.009,3.009,0,0,0,3,3H24a3.009,3.009,0,0,0,3-3v-18H9ZM28.5,6H23.25l-1.5-1.5h-7.5L12.75,6H7.5V9h21Z"
+                        transform="translate(-7.5 -4.5)" />
+                    </svg>
+                </button>
+            </div>
+        }
+    </div>
+
+    <p class="status">@Status</p>
+</div>
+
+@code {
+
+    #region properties
+    public Dictionary DictionaryOnEdit { get; set; } = new Dictionary();
+    public Word NewWord { get; set; } = new Word();
+    public string Status { get; set; } = "";
+    #endregion
+
+    #region methods
+    protected override Task OnInitializedAsync()
+    {
+        DictionaryOnEdit.Words = new List<Word>();
+
+        return base.OnInitializedAsync();
+    }
+
+    public void AddNewWord()
+    {
+        if (!String.IsNullOrEmpty(NewWord.WordContent))
+        {
+            var word = new Word
+            {
+                WordContent = NewWord.WordContent,
+                Meaning = NewWord.Meaning
+            };
+
+            DictionaryOnEdit.Words.Add(word);
+
+            Status = $"added {NewWord.WordContent} to dictionary {DictionaryOnEdit.DictionaryName}";
+
+            ResetNewWord();
+        }
+        else
+            Status = $"word is empty";
+    }
+
+    public void ResetNewWord()
+    {
+        NewWord.WordContent = "";
+        NewWord.Meaning = "";
+    }
+
+    public void ResetDictionary()
+    {
+        DictionaryOnEdit.DictionaryName = "";
+        DictionaryOnEdit.Words.Clear();
+    }
+
+    public void DeleteWord(Word word)
+    {
+        var wordContent = word.WordContent;
+
+        DictionaryOnEdit.Words.Remove(word);
+
+        Status = $"deleted {wordContent}";
+
+        System.Console.WriteLine("deleted stuff");
+    }
+
+    public void OnNewWordSubmit()
+    {
+        AddNewWord();
+    }
+
+    public void OnSave()
+    {
+        if (!String.IsNullOrEmpty(DictionaryOnEdit.DictionaryName))
+        {
+            var dictionary = new Dictionary
+            {
+                DictionaryName = DictionaryOnEdit.DictionaryName,
+                Words = DictionaryOnEdit.Words
+            };
+
+            WordService.AddDictionaryToCurrentPlayer(dictionary);
+
+            ResetDictionary();
+
+            Status = $"Saved {DictionaryOnEdit.DictionaryName}";
+        }
+        else
+            Status = $"sorry!! can't save dictionary without a name";
+    }
+    #endregion
+}

@@ -1,0 +1,108 @@
+.container {
+	margin: 50px 60px;
+}
+
+.dictionary-name {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.dictionary-name .name {
+	color: var(--secondary-color);
+	font-size: 24px;
+}
+
+.dictionary-name button {
+	all: unset;
+	text-align: center;
+	background-color: transparent;
+	border: 3px solid var(--secondary-color);
+	font-size: 18px;
+	width: 200px;
+	padding: 10px;
+	color: var(--tertiary-color);
+}
+
+.new-word ::deep form {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 40px;
+}
+
+.new-word button {
+	all: unset;
+	background-color: transparent;
+	border: 3px solid var(--tertiary-color);
+	font-size: 24px;
+	display: flex;
+	align-items: center;
+	width: 200px;
+	padding: 10px;
+}
+
+.container button .name {
+	margin-left: 40px;
+	color: var(--secondary-color);
+}
+
+.new-word span {
+	color: var(--tertiary-color);
+	font-size: 24px;
+}
+
+.new-word div {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.new-word ::deep input {
+	background-color: transparent;
+	border: 3px solid var(--secondary-color);
+	font-size: 22px;
+	margin-left: 20px;
+}
+
+::deep input {
+	margin-left: 50px;
+	font-size: 22px;
+	background-color: transparent;
+	border: 3px solid var(--tertiary-color);
+	color: var(--tertiary-color);
+}
+
+.status {
+	color: var(--tertiary-color);
+	position: absolute;
+	bottom: 5px;
+	font-style: oblique;
+	border-top: 3px solid var(--secondary-color);
+}
+
+.word-list {
+	margin-top: 50px;
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+.word-in-list {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: transparent;
+	border: 3px solid var(--tertiary-color);
+	padding: 10px;
+	color: var(--secondary-color);
+	font-size: 18px;
+	margin-bottom: 30px;
+}
+
+.word-in-list .meaning {
+	color: var(--tertiary-color);
+}
+
+.word-in-list button.delete {
+	all: unset;
+}

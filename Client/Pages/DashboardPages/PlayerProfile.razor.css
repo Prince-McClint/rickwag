@@ -1,0 +1,42 @@
+﻿.container {
+	margin: 50px 60px;
+}
+
+h1 {
+	color: var(--secondary-color);
+}
+
+fieldset {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border: none;
+	margin-bottom: 40px;
+	padding: 0px;
+}
+
+::deep form {
+	color: var(--tertiary-color);
+	font-size: 18px;
+	width: 60%;
+}
+
+::deep input {
+	min-width: 300px;
+	min-height: 25px;
+	background-color: transparent;
+	color: var(--tertiary-color);
+	border: 3px solid var(--secondary-color);
+}
+
+button {
+	all: unset;
+	text-align: center;
+	background-color: transparent;
+	border: 3px solid var(--tertiary-color);
+	color: var(--secondary-color);
+	padding: 10px;
+	font-size: 20px;
+	min-width: 150px;
+	margin-top: 40px;
+}

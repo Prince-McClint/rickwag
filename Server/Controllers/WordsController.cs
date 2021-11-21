@@ -57,6 +57,22 @@ namespace WordJumble.Server.Controllers
         }
 
         [HttpGet]
+        public async Task<IList<Dictionary>> GetCurrentPlayerDictionaries()
+        {
+            IList<Dictionary> dictionaries = new List<Dictionary>();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var player = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                if (player.Dictionaries != null)
+                    dictionaries = player.Dictionaries.ToArray();
+            }
+
+            return dictionaries;
+        }
+
+        [HttpGet]
         public async Task<string> GetWordMeaning(string word)
         {
             var client = new HttpClient();
@@ -78,6 +94,28 @@ namespace WordJumble.Server.Controllers
                 Console.WriteLine(body);
 
                 return body;
+            }
+        }
+
+        [HttpPost]
+        public async Task AddDictionaryToCurrentPlayer(Dictionary dictionary)
+        {
+            Console.WriteLine($"taking in {dictionary}");
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var player = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                if (player.Dictionaries == null)
+                    player.Dictionaries = new List<Dictionary>();
+
+                player.Dictionaries.Add(dictionary);
+
+                await _userManager.UpdateAsync(player);
+
+                Console.WriteLine($"{dictionary.DictionaryName} dictionary counts => {player.Dictionaries.Count}");
+
+                Console.WriteLine("random stuff");
             }
         }
         #endregion

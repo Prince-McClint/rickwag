@@ -4,7 +4,7 @@ using WordJumble.Shared;
 
 namespace WordJumble.Client.Services
 {
-    
+
     public class AccountsService : IAccountsService
     {
         #region fields
@@ -47,6 +47,15 @@ namespace WordJumble.Client.Services
             var requestUri = "api/accounts/logout";
 
             var result = await httpClient.PostAsync(requestUri, null);
+            result.EnsureSuccessStatusCode();
+        }
+
+        public async Task SavePlayerProfile(UserProfile profile)
+        {
+            var requestUri = "api/accounts/SavePlayerProfile";
+
+            var result = await httpClient.PostAsJsonAsync<UserProfile>(requestUri, profile);
+
             result.EnsureSuccessStatusCode();
         }
         #endregion
