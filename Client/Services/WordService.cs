@@ -12,20 +12,13 @@ namespace WordJumble.Client.Services
 
         #region properties
         public List<Word> CurrentWords { get; set; } = new List<Word>();
-        public Dictionary CurrentDictionary { get; set; }
+        public Dictionary CurrentDictionary { get; set; } = new Dictionary();
         #endregion
 
         #region methods
         public WordService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-        }
-
-        public async Task<List<Word>> GetWords()
-        {
-            var requestUri = "api/Words/GetWords";
-
-            return await _httpClient.GetFromJsonAsync<List<Word>>(requestUri);
         }
 
         public async Task SetCurrentDictionary(Dictionary dictionary)
@@ -49,9 +42,7 @@ namespace WordJumble.Client.Services
 
         public async Task<Dictionary> GetDictionary(int DictionaryID)
         {
-            var requestUri = $"api/words/getdictionary/{DictionaryID}";
-
-            Console.WriteLine("before json");
+            var requestUri = $"api/words/GetDictionary/{DictionaryID}";
 
             return await _httpClient.GetFromJsonAsync<Dictionary>(requestUri);
         }
@@ -87,20 +78,50 @@ namespace WordJumble.Client.Services
             return await _httpClient.GetFromJsonAsync<List<Dictionary>>(requestUri);
         }
 
+        public async Task<List<Dictionary>> GetPlayerDictionaries()
+        {
+            var requestUri = "api/words/GetPlayerDictionaries";
+
+            return await _httpClient.GetFromJsonAsync<List<Dictionary>>(requestUri);
+        }
+
         public async Task AddDictionaryToCurrentPlayer(Dictionary dictionary)
         {
             var requestUri = "api/words/AddDictionaryToCurrentPlayer";
 
-            await _httpClient.PostAsJsonAsync(requestUri, dictionary);
+            var result = await _httpClient.PostAsJsonAsync(requestUri, dictionary);
+
+            result.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<Dictionary>> GetCurrentPlayerDictionaries()
+        public async Task<Player> GetCurrentPlayer()
         {
-            var requestUri = "api/words/GetCurrentPlayerDictionaries";
+            var requestUri = "api/words/GetcurrentPlayer";
 
-            var dictionaries = await _httpClient.GetFromJsonAsync<List<Dictionary>>(requestUri);
+            var player = await _httpClient.GetFromJsonAsync<Player>(requestUri);
 
-            return dictionaries;
+            return player;
+        }
+
+        public async Task<List<Word>> GetWordsFromDictionary(int id)
+        {
+            var requestUri = $"api/words/GetWordsFromDictionary/{id}";
+
+            return await _httpClient.GetFromJsonAsync<List<Word>>(requestUri);
+        }
+
+        public async Task UpdateDictionary(Dictionary dictionary)
+        {
+            var requestUri = "api/words/UpdateDictionary";
+
+            await _httpClient.PutAsJsonAsync<Dictionary>(requestUri, dictionary);
+        }
+
+        public async Task DeleteDictionary(int id)
+        {
+            var requestUri = $"api/words/DeleteDictionary/{id}";
+
+            await _httpClient.DeleteAsync(requestUri);
         }
         #endregion
     }

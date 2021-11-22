@@ -19,3 +19,43 @@
 .container button .name {
 	margin-left: 40px;
 }
+
+.dictionaries {
+	display: flex;
+	flex-wrap: wrap;
+	margin-left: 60px;
+	height: 75%;
+	overflow-y: auto;
+}
+
+.dictionary {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--tertiary-color);
+	width: 250px;
+	height: 220px;
+	margin-right: 70px;
+	margin-bottom: 50px;
+	border-radius: 13px;
+	padding: 20px;
+}
+
+.dictionary .name {
+	font-size: 38px;
+	margin-top: 30%;
+}
+
+.dictionary .buttons {
+	all: unset;
+	width: 80%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.edit-svg,
+.delete-svg {
+	fill: var(--primary-color);
+}

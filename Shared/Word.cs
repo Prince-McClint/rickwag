@@ -7,9 +7,11 @@ namespace WordJumble.Shared
         public int WordID { get; set; }
 
         [Required]
-        public string? WordContent { get; set; }
+        public string WordContent { get; set; }
         public string? Meaning { get; set; }
 
-        public List<Score>? Scores { get; set; }
+        //relationship properties
+        public int DictionaryID { get; set; }
+        public Dictionary? Dictionary { get; set; }
     }
 }

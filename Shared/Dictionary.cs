@@ -8,8 +8,12 @@ namespace WordJumble.Shared
         public int DictionaryID { get; set; }
 
         [Required]
-        public string? DictionaryName { get; set; }
+        public string DictionaryName { get; set; }
 
+        //relationship properties
         public List<Word>? Words { get; set; }
+
+        public string? PlayerID { get; set; }
+        public Player? Player { get; set; }
     }
 }

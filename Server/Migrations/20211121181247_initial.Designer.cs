@@ -12,8 +12,8 @@ using WordJumble.Server.Models;
 namespace WordJumble.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211119073222_player-mod-2")]
-    partial class playermod2
+    [Migration("20211121181247_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -157,7 +157,29 @@ namespace WordJumble.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WordJumble.Server.Models.Player", b =>
+            modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
+                {
+                    b.Property<int>("DictionaryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DictionaryID"), 1L, 1);
+
+                    b.Property<string>("DictionaryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlayerID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("DictionaryID");
+
+                    b.HasIndex("PlayerID");
+
+                    b.ToTable("Dictionaries");
+                });
+
+            modelBuilder.Entity("WordJumble.Shared.Player", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -199,9 +221,6 @@ namespace WordJumble.Server.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("School")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -225,54 +244,6 @@ namespace WordJumble.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
-                {
-                    b.Property<int>("DictionaryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DictionaryID"), 1L, 1);
-
-                    b.Property<string>("DictionaryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("DictionaryID");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("Dictionaries");
-                });
-
-            modelBuilder.Entity("WordJumble.Shared.Score", b =>
-                {
-                    b.Property<int>("ScoreID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScoreID"), 1L, 1);
-
-                    b.Property<string>("PlayerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ScoreValue")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WordID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ScoreID");
-
-                    b.HasIndex("PlayerId");
-
-                    b.HasIndex("WordID");
-
-                    b.ToTable("Scores");
-                });
-
             modelBuilder.Entity("WordJumble.Shared.Word", b =>
                 {
                     b.Property<int>("WordID")
@@ -281,7 +252,7 @@ namespace WordJumble.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WordID"), 1L, 1);
 
-                    b.Property<int?>("DictionaryID")
+                    b.Property<int>("DictionaryID")
                         .HasColumnType("int");
 
                     b.Property<string>("Meaning")
@@ -309,7 +280,7 @@ namespace WordJumble.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
+                    b.HasOne("WordJumble.Shared.Player", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -318,7 +289,7 @@ namespace WordJumble.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
+                    b.HasOne("WordJumble.Shared.Player", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -333,7 +304,7 @@ namespace WordJumble.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WordJumble.Server.Models.Player", null)
+                    b.HasOne("WordJumble.Shared.Player", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -342,7 +313,7 @@ namespace WordJumble.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
+                    b.HasOne("WordJumble.Shared.Player", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -351,34 +322,22 @@ namespace WordJumble.Server.Migrations
 
             modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
                 {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
+                    b.HasOne("WordJumble.Shared.Player", "Player")
                         .WithMany("Dictionaries")
-                        .HasForeignKey("PlayerId");
-                });
+                        .HasForeignKey("PlayerID");
 
-            modelBuilder.Entity("WordJumble.Shared.Score", b =>
-                {
-                    b.HasOne("WordJumble.Server.Models.Player", null)
-                        .WithMany("Scores")
-                        .HasForeignKey("PlayerId");
-
-                    b.HasOne("WordJumble.Shared.Word", null)
-                        .WithMany("Scores")
-                        .HasForeignKey("WordID");
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("WordJumble.Shared.Word", b =>
                 {
-                    b.HasOne("WordJumble.Shared.Dictionary", null)
+                    b.HasOne("WordJumble.Shared.Dictionary", "Dictionary")
                         .WithMany("Words")
-                        .HasForeignKey("DictionaryID");
-                });
+                        .HasForeignKey("DictionaryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("WordJumble.Server.Models.Player", b =>
-                {
-                    b.Navigation("Dictionaries");
-
-                    b.Navigation("Scores");
+                    b.Navigation("Dictionary");
                 });
 
             modelBuilder.Entity("WordJumble.Shared.Dictionary", b =>
@@ -386,9 +345,9 @@ namespace WordJumble.Server.Migrations
                     b.Navigation("Words");
                 });
 
-            modelBuilder.Entity("WordJumble.Shared.Word", b =>
+            modelBuilder.Entity("WordJumble.Shared.Player", b =>
                 {
-                    b.Navigation("Scores");
+                    b.Navigation("Dictionaries");
                 });
 #pragma warning restore 612, 618
         }

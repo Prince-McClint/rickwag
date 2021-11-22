@@ -1,14 +1,13 @@
-@page "/dashboard/dictionaries/edit"
-@page "/dashboard/dictionaries/edit/{DictionaryID:int}"
+@page "/dashboard/dictionaries/new"
 
 @attribute [Authorize]
 
 <div class="container">
-    <EditForm Model="DictionaryOnEdit" OnValidSubmit="OnSave">
+    <EditForm Model="NewDictionary" OnValidSubmit="OnSave">
         <div class="dictionary-name">
             <div>
                 <span class="name">dictionary name</span>
-                <InputText @bind-Value="DictionaryOnEdit.DictionaryName" />
+                <InputText @bind-Value="NewDictionary.DictionaryName" />
             </div>
 
             <button type="submit">save</button>
@@ -49,9 +48,9 @@
     </div>
 
     <div class="word-list">
-        @if (DictionaryOnEdit.Words != null)
+        @if (NewDictionary.Words != null)
         {
-            @foreach (var word in DictionaryOnEdit.Words)
+            @foreach (var word in NewDictionary.Words)
             {
                 <div class="word-in-list">
                     <span class="word">@word.WordContent</span>
@@ -81,9 +80,7 @@
 @code {
 
     #region properties
-    [Parameter]
-    public int DictionaryID { get; set; }
-    public Dictionary DictionaryOnEdit { get; set; } = new Dictionary();
+    public Dictionary NewDictionary { get; set; } = new Dictionary();
     public Word NewWord { get; set; } = new Word();
     public string Status { get; set; } = "";
     #endregion
@@ -91,9 +88,6 @@
     #region methods
     protected override async Task OnInitializedAsync()
     {
-        DictionaryOnEdit = await WordService.GetDictionary(DictionaryID);
-
-        DictionaryOnEdit.Words = await WordService.GetWordsFromDictionary(DictionaryID);
     }
 
     public void AddNewWord()
@@ -106,12 +100,10 @@
                 Meaning = NewWord.Meaning,
             };
 
-            if (DictionaryOnEdit.Words == null)
-                DictionaryOnEdit.Words = new List<Word>();
+            if (NewDictionary.Words == null)
+                NewDictionary.Words = new List<Word>();
 
-            DictionaryOnEdit.Words.Add(word);
-
-            Status = $"added {NewWord.WordContent} to {DictionaryOnEdit.DictionaryName}";
+            NewDictionary.Words.Add(word);
 
             ResetNewWord();
         }
@@ -127,15 +119,15 @@
 
     public void ResetDictionary()
     {
-        DictionaryOnEdit.DictionaryName = "";
-        DictionaryOnEdit.Words.Clear();
+        NewDictionary.DictionaryName = "";
+        NewDictionary.Words.Clear();
     }
 
     public void DeleteWord(Word word)
     {
         var wordContent = word.WordContent;
 
-        DictionaryOnEdit.Words.Remove(word);
+        NewDictionary.Words.Remove(word);
 
         Status = $"deleted {wordContent}";
     }
@@ -147,14 +139,23 @@
 
     public void OnSave()
     {
-        if (!String.IsNullOrEmpty(DictionaryOnEdit.DictionaryName))
+        if (!String.IsNullOrEmpty(NewDictionary.DictionaryName))
         {
-            WordService.UpdateDictionary(DictionaryOnEdit);
+            var dictionary = new Dictionary
+            {
+                DictionaryID = NewDictionary.DictionaryID,
+                DictionaryName = NewDictionary.DictionaryName,
+                Words = NewDictionary.Words
+            };
 
-            Status = $"updated {DictionaryOnEdit.DictionaryName}";
+            WordService.AddDictionaryToCurrentPlayer(dictionary);
+
+            Status = $"added dictionary => {NewDictionary.DictionaryName}";
+
+            ResetDictionary();
         }
         else
-            Status = $"sorry!! can't save dictionary without a name";
+            Status = "sorry, can't save dictionary without a name";
     }
     #endregion
 }

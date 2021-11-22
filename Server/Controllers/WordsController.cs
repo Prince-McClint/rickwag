@@ -22,17 +22,10 @@ namespace WordJumble.Server.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
-        public IList<Word> GetWords()
-        {
-            return _context.Words.ToArray();
-        }
-
-        [HttpGet]
+        [HttpGet("{id:int}")]
         public Dictionary GetDictionary(int id)
         {
-            var dictionary = _context.Dictionaries.First();
-
+            var dictionary = _context.Dictionaries.FirstOrDefault(dic => dic.DictionaryID == id);
 
             return dictionary;
         }
@@ -54,29 +47,6 @@ namespace WordJumble.Server.Controllers
             }
 
             return userDictionary;
-        }
-
-        [HttpGet]
-        public async Task<IList<Dictionary>> GetCurrentPlayerDictionaries()
-        {
-            IList<Dictionary> dictionaries = new List<Dictionary>();
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var player = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                System.Console.WriteLine($"player {player.UserName} id is {player.Id}");
-
-                if (player.Dictionaries != null)
-                    dictionaries = player.Dictionaries.ToArray();
-                else
-                    System.Console.WriteLine("player dictionaries is null");
-
-                var currentUser = _context.Users.First(user => user.Id == player.Id);
-                System.Console.WriteLine($"current user => {currentUser.Dictionaries}");
-            }
-
-            return dictionaries;
         }
 
         [HttpGet]
@@ -107,25 +77,91 @@ namespace WordJumble.Server.Controllers
         [HttpPost]
         public async Task AddDictionaryToCurrentPlayer(Dictionary dictionary)
         {
-            var player = await _userManager.FindByNameAsync(User.Identity.Name);
+            var player = await _userManager.FindByNameAsync(User.Identity?.Name);
 
-            if (player.Dictionaries == null)
-                player.Dictionaries = new List<Dictionary>();
-
-            player.Dictionaries.Add(dictionary);
-
-            var result = await _userManager.UpdateAsync(player);
-
-            if (result.Succeeded)
-                System.Console.WriteLine("saved player");
-
-            IList<Dictionary> dictsInDb = _context.Dictionaries.ToArray();
-            System.Console.WriteLine($"dictionaries in db count {dictsInDb.Count}");
-
-            foreach (var dict in dictsInDb)
+            if (player != null)
             {
-                System.Console.WriteLine($"{dict.DictionaryName}");
+                if (player.Dictionaries == null)
+                    player.Dictionaries = new List<Dictionary>();
+
+                player.Dictionaries.Add(dictionary);
+
+                var result = await _userManager.UpdateAsync(player);
+
+                if (result.Succeeded)
+                {
+                    var playerAfter = await _userManager.FindByNameAsync(User.Identity?.Name);
+
+                    if (player != null)
+                    {
+                        System.Console.WriteLine($"saved {player} dictionary count => {player.Dictionaries?.Count}");
+                    }
+                }
             }
+        }
+
+        [HttpGet("{id:int}")]
+        public IList<Word> GetWordsFromDictionary(int id)
+        {
+            List<Word> words = _context.Words.ToList();
+            List<Word> dictionaryWords = new List<Word>();
+
+            foreach (var word in words)
+                if (word.DictionaryID == id) dictionaryWords.Add(word);
+
+
+            return dictionaryWords;
+        }
+
+        [HttpGet]
+        public async Task<Player> GetCurrentPlayer()
+        {
+            return await _userManager.FindByNameAsync(User.Identity.Name);
+        }
+
+
+        [HttpPut]
+        public void UpdateDictionary(Dictionary dictionary)
+        {
+            var existingDictionary = _context.Dictionaries.First(dic => dic.DictionaryID == dictionary.DictionaryID);
+            var existingWords = GetWordsFromDictionary(existingDictionary.DictionaryID);
+            var wordsToAdd = dictionary.Words;
+
+            //to handle deleting
+            foreach (var word in existingWords)
+            {
+                if (!(dictionary.Words.Contains(word))) _context.Words.Remove(word);
+            }
+
+            existingDictionary.DictionaryName = dictionary.DictionaryName;
+            existingDictionary.Words = wordsToAdd;
+
+            _context.SaveChanges();
+        }
+
+        [HttpDelete("{id:int}")]
+        public void DeleteDictionary(int id)
+        {
+            var dictionary = _context.Dictionaries.First(dic => dic.DictionaryID == id);
+            var dicName = dictionary.DictionaryName;
+
+            _context.Dictionaries.Remove(dictionary);
+
+            _context.SaveChanges();
+        }
+
+        [HttpGet]
+        public IList<Dictionary> GetPlayerDictionaries()
+        {
+            var playerDictionaries = new List<Dictionary>();
+            var dictionaries = GetDictionaries();
+
+            foreach (var dictionary in dictionaries)
+            {
+                if (dictionary.PlayerID == _userManager.GetUserId(User)) playerDictionaries.Add(dictionary);
+            }
+
+            return playerDictionaries;
         }
         #endregion
     }

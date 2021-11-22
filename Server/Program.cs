@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
 using WordJumble.Server.Models;
+using WordJumble.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 

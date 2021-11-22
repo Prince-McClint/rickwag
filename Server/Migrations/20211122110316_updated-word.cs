@@ -4,7 +4,7 @@
 
 namespace WordJumble.Server.Migrations
 {
-    public partial class playermod1 : Migration
+    public partial class updatedword : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

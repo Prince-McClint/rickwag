@@ -154,6 +154,46 @@ namespace WordJumble.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Dictionaries",
+                columns: table => new
+                {
+                    DictionaryID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DictionaryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlayerID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dictionaries", x => x.DictionaryID);
+                    table.ForeignKey(
+                        name: "FK_Dictionaries_AspNetUsers_PlayerID",
+                        column: x => x.PlayerID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Words",
+                columns: table => new
+                {
+                    WordID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WordContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Meaning = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DictionaryID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Words", x => x.WordID);
+                    table.ForeignKey(
+                        name: "FK_Words_Dictionaries_DictionaryID",
+                        column: x => x.DictionaryID,
+                        principalTable: "Dictionaries",
+                        principalColumn: "DictionaryID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +232,16 @@ namespace WordJumble.Server.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dictionaries_PlayerID",
+                table: "Dictionaries",
+                column: "PlayerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Words_DictionaryID",
+                table: "Words",
+                column: "DictionaryID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -212,7 +262,13 @@ namespace WordJumble.Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Words");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Dictionaries");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

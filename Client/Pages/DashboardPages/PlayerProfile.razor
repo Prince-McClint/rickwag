@@ -3,7 +3,7 @@
 @inject IAccountsService AccountService
 
 <div class="container">
-    <h1>Your Profile</h1>
+    <h1>@Profile.Username Profile</h1>
 
     <EditForm Model="Profile" OnValidSubmit="SavePlayerProfile">
         <DataAnnotationsValidator />
