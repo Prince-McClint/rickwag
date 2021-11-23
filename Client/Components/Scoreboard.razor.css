@@ -30,7 +30,9 @@ h1 {
 }
 
 .players-scores {
+	height: 55%;
 	margin-top: 50px;
+	overflow-y: auto;
 }
 
 .player-score {

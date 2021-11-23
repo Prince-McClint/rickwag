@@ -11,10 +11,6 @@ header {
 	align-items: center;
 }
 
-.logo {
-	font-size: 25px;
-}
-
 nav ul {
 	list-style-type: none;
 	display: flex;

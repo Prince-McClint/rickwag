@@ -69,7 +69,7 @@
                 </svg>
             </button>
 
-            <button>
+            <button @onclick="OnShowLeaderboardClick">
                 <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49"
                     viewBox="0 0 72.417 46.083">
                     <path id="Icon_material-people" data-name="Icon material-people"
@@ -125,11 +125,20 @@
         </button>
     </footer>
 
+    @if (ShowOverlay)
+    {
+        <div class="overlay"></div>
+    }
+
     @if (IsDonePlaying)
     {
         <DonePlaying TotalScore=TotalScore />
+    }
 
-        <div class="overlay"></div>
+
+    @if (ShowLeaderboard)
+    {
+        <PlayGroundLeaderboard OnClose="OnHideLeaderboard" />
     }
 
 </div>
@@ -166,7 +175,10 @@
 
     public int PossibleScore { get; set; } = 0;
     public int TotalScore { get; set; } = 0;
+    public bool ShowOverlay { get; set; } = false;
     public bool IsDonePlaying { get; set; } = false;
+    public bool ShowLeaderboard { get; set; } = false;
+
     #endregion
 
     #region methods
@@ -182,6 +194,7 @@
         if (String.IsNullOrEmpty(nextWord))
         {
             IsDonePlaying = true;
+            ShowOverlay = true;
             canScore = false;
             return;
         }
@@ -289,6 +302,8 @@
             if (peakCount < WordAsList.Count - 1)
                 peakCount++;
         }
+
+        PossibleScorePenalty(LETTERSCORE);
     }
 
     public void ResetPeakCount() => peakCount = 0;
@@ -300,6 +315,14 @@
         var correctWordList = WordToList(CurrentWord);
 
         WordAsList = correctWordList;
+
+        PossibleScorePenalty(PossibleScore);
+    }
+
+    public void PossibleScorePenalty(int penaltyValue)
+    {
+        if (PossibleScore > 0) PossibleScore -= penaltyValue;
+        else PossibleScore = 0;
     }
 
     public void OnDragStart(int draggedIndex)
@@ -345,7 +368,20 @@
 
     public void OnQuitClick()
     {
-        NavManager.NavigateTo("");
+        ShowOverlay = true;
+        IsDonePlaying = true;
+    }
+
+    public void OnShowLeaderboardClick()
+    {
+        ShowOverlay = true;
+        ShowLeaderboard = true;
+    }
+
+    public void OnHideLeaderboard()
+    {
+        ShowOverlay = false;
+        ShowLeaderboard = false;
     }
     #endregion
 }

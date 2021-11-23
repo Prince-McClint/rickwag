@@ -1,0 +1,26 @@
+.container {
+	position: absolute;
+	top: calc(50% - 70% / 2);
+	left: calc(50% - 30% / 2);
+	width: 30%;
+	height: 70%;
+	background-color: var(--primary-color);
+	border-radius: 13px;
+	padding: 30px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+button {
+	all: unset;
+	color: var(--tertiary-color);
+	text-align: center;
+	border: 3px solid var(--secondary-color);
+	width: 250px;
+	height: 30px;
+	padding: 5px;
+	font-size: 18px;
+	font-weight: bold;
+}

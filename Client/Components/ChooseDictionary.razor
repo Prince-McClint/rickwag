@@ -1,7 +1,10 @@
 @inject IWordService WordServ
 @inject IJSRuntime JS
 <div class="container">
-    <h3>choose dictionary</h3>
+    <header>
+        <h3>choose dictionary</h3>
+        <button @onclick="OnCloseClick"><span class="oi oi-circle-x"></span></button>
+    </header>
 
     <div class="DictionariesToChoose">
         @if (DictionariesToChoose.Any())
@@ -28,6 +31,9 @@
 
     [Parameter]
     public EventCallback<bool> OnChooseDictionary { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
     #endregion
 
     #region methods
@@ -54,6 +60,11 @@
             await WordServ.SetCurrentDictionary(dictionary);
             await OnChooseDictionary.InvokeAsync(hasWords);
         }
+    }
+
+    public void OnCloseClick()
+    {
+        OnClose.InvokeAsync();
     }
     #endregion
 }
