@@ -47,8 +47,8 @@
         </div>
 
         <div id="score-box">
-            <div>possible score <span id="possible-score">12</span></div>
-            <div>total score <span id="total-score">0</span></div>
+            <div>possible score <span id="possible-score">@PossibleScore</span></div>
+            <div>total score <span id="total-score">@TotalScore</span></div>
         </div>
 
         <nav>
@@ -124,6 +124,14 @@
             <span id="text">submit</span>
         </button>
     </footer>
+
+    @if (IsDonePlaying)
+    {
+        <DonePlaying TotalScore=TotalScore />
+
+        <div class="overlay"></div>
+    }
+
 </div>
 
 
@@ -132,6 +140,8 @@
     private Random rand = new Random();
     private int currentDraggedIndex;
     private int peakCount = 0;
+    private const int LETTERSCORE = 3;
+    private bool canScore = false;
     #endregion
 
     #region properties
@@ -153,6 +163,10 @@
             return GetLetterSize(Int32.Parse(BoxSize));
         }
     }
+
+    public int PossibleScore { get; set; } = 0;
+    public int TotalScore { get; set; } = 0;
+    public bool IsDonePlaying { get; set; } = false;
     #endregion
 
     #region methods
@@ -163,11 +177,29 @@
 
     public void GetCurrentWord()
     {
-        if (WordService.GetNextWord() == null) return;
+        var nextWord = WordService.GetNextWord().WordContent;
 
-        CurrentWord = WordService.GetNextWord().WordContent;
+        if (String.IsNullOrEmpty(nextWord))
+        {
+            IsDonePlaying = true;
+            canScore = false;
+            return;
+        }
+
+        CurrentWord = nextWord;
 
         WordAsList = ShuffleList(WordToList(CurrentWord));
+
+        canScore = true;
+
+        CalcPossibleScore();
+    }
+
+    public void CalcPossibleScore()
+    {
+        var letterCount = WordAsList != null ? WordAsList.Count : 0;
+
+        PossibleScore = letterCount * LETTERSCORE;
     }
 
     public List<string> WordToList(string word)
@@ -273,14 +305,11 @@
     public void OnDragStart(int draggedIndex)
     {
         currentDraggedIndex = draggedIndex;
-
-        Console.WriteLine($"current dragged index => {currentDraggedIndex}");
     }
 
     public void OnDragDrop(int dropIndex)
     {
         SwapLetters(currentDraggedIndex, dropIndex);
-        Console.WriteLine($"drop index => {dropIndex}");
     }
 
     public void OnShuffleClick()
@@ -293,8 +322,20 @@
 
     public void OnSubmitClick()
     {
+        CheckCorrectness();
+
         ResetPeakCount();
         GetCurrentWord();
+    }
+
+    public void CheckCorrectness()
+    {
+        if (WordAsList == null || CurrentWord == null || !canScore) return;
+
+        var playedWord = MergeListToString(WordAsList);
+        var correctWord = CurrentWord.ToUpper();
+
+        if (playedWord == correctWord) TotalScore += PossibleScore;
     }
 
     public void OnMeaningClick()

@@ -1,0 +1,58 @@
+@inject IWordService WordService;
+
+<div class="container">
+    <h1>Score Board</h1>
+
+    <div class="sort">
+        <span>sort</span>
+        <button @onclick="OnSortClick">@CurrentSort</button>
+    </div>
+
+    <div class="players-scores">
+
+        @if (PlayersScores.Any())
+        {
+            @foreach (var playerScore in PlayersScores)
+            {
+                <div class="player-score">
+                    <span class="score">@playerScore.Score</span>
+                    <span class="username">@playerScore.Username</span>
+                </div>
+            }
+        }
+
+    </div>
+</div>
+
+@code {
+
+    public string CurrentSort { get; set; } = "descending";
+    public List<PlayerScore> PlayersScores { get; set; } = new List<PlayerScore>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        PlayersScores = await WordService.GetPlayersScores();
+
+        SortPlayersScores(CurrentSort);
+    }
+
+    public void SortPlayersScores(string sortValue)
+    {
+        switch (sortValue)
+        {
+            case "descending":
+                PlayersScores = PlayersScores.OrderByDescending(prop => prop.Score).ToList();
+                break;
+            case "ascending":
+                PlayersScores = PlayersScores.OrderBy(prop => prop.Score).ToList();
+                break;
+        }
+    }
+
+    public void OnSortClick()
+    {
+        CurrentSort = CurrentSort == "descending" ? "ascending" : "descending";
+
+        SortPlayersScores(CurrentSort);
+    }
+}

@@ -1,21 +1,21 @@
-@inject IWordService WordService
-
+@inject IWordService WordServ
+@inject IJSRuntime JS
 <div class="container">
     <h3>choose dictionary</h3>
 
-    <div class="dictionaries">
-        @if (Dictionaries.Any())
+    <div class="DictionariesToChoose">
+        @if (DictionariesToChoose.Any())
         {
-            @foreach (var dictionary in Dictionaries)
+            @foreach (var dictionary in DictionariesToChoose)
             {
-                <div class="dictionary" @onclick="@(() => OnChooseDictionaryClick(dictionary))">
+                <div class="dictionary" @onclick="@(() => OnDictionaryClick(dictionary))">
                     <span class="dictionary-name">@dictionary.DictionaryName</span>
                 </div>
             }
         }
         else
         {
-            <p>Loading dictionaries...</p>
+            <p>Loading Dictionaries...</p>
         }
     </div>
 </div>
@@ -24,24 +24,36 @@
 
     #region properties
     //[Parameter]
-    public List<Dictionary> Dictionaries { get; set; } = new List<Dictionary>();
+    public List<Dictionary> DictionariesToChoose { get; set; } = new List<Dictionary>();
 
     [Parameter]
-    public EventCallback OnChooseDictionary { get; set; }
+    public EventCallback<bool> OnChooseDictionary { get; set; }
     #endregion
 
     #region methods
     protected override async Task OnInitializedAsync()
     {
-        Dictionaries = await WordService.GetDictionaries();
+        DictionariesToChoose = await WordServ.GetDictionaries();
     }
 
-    public void OnChooseDictionaryClick(Dictionary dictionary)
+    public async Task OnDictionaryClick(Dictionary dictionary)
     {
+        var words = await WordServ.GetWordsFromDictionary(dictionary.DictionaryID);
 
-        WordService.SetCurrentDictionary(dictionary);
+        var hasWords = words.Count > 0 ? true : false;
 
-        OnChooseDictionary.InvokeAsync();
+        if (!hasWords)
+        {
+            await JS.InvokeVoidAsync("show_alert", "sorry, dictionary has no words. \nselect another one");
+            await OnChooseDictionary.InvokeAsync(hasWords);
+
+            return;
+        }
+        else
+        {
+            await WordServ.SetCurrentDictionary(dictionary);
+            await OnChooseDictionary.InvokeAsync(hasWords);
+        }
     }
     #endregion
 }

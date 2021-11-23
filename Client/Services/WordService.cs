@@ -7,6 +7,7 @@ namespace WordJumble.Client.Services
     {
         #region fields
         private readonly HttpClient _httpClient;
+        private int count = 0;
         private int currentWordCount = 0;
         #endregion
 
@@ -21,23 +22,29 @@ namespace WordJumble.Client.Services
             _httpClient = httpClient;
         }
 
+        public int GetCount() => count++;
+
         public async Task SetCurrentDictionary(Dictionary dictionary)
         {
+            currentWordCount = 0;
+
             CurrentDictionary = dictionary;
-            SetCurrentWords();
+            await SetCurrentWords(CurrentDictionary.DictionaryID);
         }
 
-        private void SetCurrentWords()
+        private async Task SetCurrentWords(int currentDicID)
         {
-            CurrentWords = CurrentDictionary.Words;
+            CurrentWords = await GetWordsFromDictionary(currentDicID);
         }
 
         public Word GetNextWord()
         {
-            //check later
-            if (!CurrentWords.Any()) return null;
+            var word = new Word();
 
-            return CurrentWords[currentWordCount != CurrentWords.Count - 1 ? currentWordCount++ : currentWordCount = 0];
+            if (currentWordCount < CurrentWords?.Count)
+                word = CurrentWords[currentWordCount++];
+
+            return word;
         }
 
         public async Task<Dictionary> GetDictionary(int DictionaryID)
@@ -122,6 +129,23 @@ namespace WordJumble.Client.Services
             var requestUri = $"api/words/DeleteDictionary/{id}";
 
             await _httpClient.DeleteAsync(requestUri);
+        }
+
+        public async Task SavePlayerScore(int score)
+        {
+            var newScore = new Score { Value = score };
+
+            var requestUri = "api/words/SavePlayerScore";
+
+            var result = await _httpClient.PostAsJsonAsync<Score>(requestUri, newScore);
+            result.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<PlayerScore>> GetPlayersScores()
+        {
+            var requestUri = "api/words/GetPlayersScores";
+
+            return await _httpClient.GetFromJsonAsync<List<PlayerScore>>(requestUri);
         }
         #endregion
     }

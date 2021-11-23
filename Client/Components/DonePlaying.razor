@@ -1,0 +1,32 @@
+@inject NavigationManager NavManager
+@inject IWordService WordService
+
+<div class="container">
+    <h1>Congratulations!!</h1>
+    <h3>Done Playing</h3>
+
+    <div class="score">
+        <p>Total Score</p>
+        <p><span id="score-value">@TotalScore</span> points</p>
+    </div>
+
+    <button @onclick="OnOkayClick">okay dokey</button>
+</div>
+
+@code {
+
+    [Parameter]
+    public int TotalScore { get; set; }
+
+
+    public async Task OnOkayClick()
+    {
+        await SaveScore();
+        NavManager.NavigateTo("/dashboard");
+    }
+
+    public async Task SaveScore()
+    {
+        await WordService.SavePlayerScore(TotalScore);
+    }
+}

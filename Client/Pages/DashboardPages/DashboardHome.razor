@@ -41,9 +41,12 @@
         ToggleChooseDic();
     }
 
-    public void OnChooseDictionary()
+    public void OnChooseDictionary(bool hasWords)
     {
         ToggleChooseDic();
+
+        if (!hasWords) return;
+
         NavManager.NavigateTo("/playground");
     }
     #endregion

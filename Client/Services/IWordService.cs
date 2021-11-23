@@ -5,6 +5,7 @@ namespace WordJumble.Client.Services
     public interface IWordService
     {
         public Task SetCurrentDictionary(Dictionary dictionary);
+        public int GetCount();
         public Word GetNextWord();
         public Task<Dictionary> GetDictionary(int ID);
         public Task<string> GetWordMeaning(string word);
@@ -15,5 +16,7 @@ namespace WordJumble.Client.Services
         public Task<Player> GetCurrentPlayer();
         public Task UpdateDictionary(Dictionary dictionary);
         public Task DeleteDictionary(int dictionaryID);
+        public Task SavePlayerScore(int score);
+        public Task<List<PlayerScore>> GetPlayersScores();
     }
 }

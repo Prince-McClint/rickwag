@@ -1,127 +1,134 @@
 ﻿.container {
-    background-color: var(--tertiary-color);
-    height: 100%;
-    padding: 20px 50px 0px;
+	background-color: var(--tertiary-color);
+	height: 100%;
+	padding: 20px 50px 0px;
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 #quit-btn {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 #quit-btn #text {
-    color: var(--secondary-color);
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: -8px;
+	color: var(--secondary-color);
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: -8px;
 }
 
 #score-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 3px var(--secondary-color) solid;
-    padding: 10px;
-    border-radius: 15px;
-    min-width: 150px;
-    color: var(--primary-color);
-    margin-right: -200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: 3px var(--secondary-color) solid;
+	padding: 10px;
+	border-radius: 15px;
+	min-width: 150px;
+	color: var(--primary-color);
+	margin-right: -200px;
 }
 
 #score-box div {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    font-weight: 500;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	font-weight: 500;
 }
 
 #score-box :first-child {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 #score-box #possible-score {
-    color: var(--secondary-color);
+	color: var(--secondary-color);
 }
 
-#score-box #possible-score, #total-score {
-    font-weight: normal;
+#score-box #possible-score,
+#total-score {
+	font-weight: normal;
 }
-
 
 nav button {
-    all: unset;
-    margin-left: 80px;
+	all: unset;
+	margin-left: 80px;
 }
 
 .btn-svg {
-    width: 30px;
-    height: 30px;
+	width: 30px;
+	height: 30px;
 }
 
 main {
-    height: 52%;
+	height: 52%;
 }
-
 
 .word-display {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: auto 0px;
-    height: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: auto 0px;
+	height: 100%;
 }
 
-
 .buttons {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .buttons div {
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	width: 50%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-    .buttons button {
-        all: unset;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-color: var(--secondary-color);
-        text-align: center;
-        color: var(--primary-color);
-        font-size: 20px;
-        font-style: italic;
-        box-shadow: 10px 8px 3px rgb(255, 74, 235, 0.55);
-    }
+.buttons button {
+	all: unset;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	background-color: var(--secondary-color);
+	text-align: center;
+	color: var(--primary-color);
+	font-size: 20px;
+	font-style: italic;
+	box-shadow: 10px 8px 3px rgb(255, 74, 235, 0.55);
+}
 
 footer {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
+	margin-top: 50px;
+	display: flex;
+	justify-content: center;
 }
 
 footer .logo {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 footer button {
-    all: unset;
-    text-align: center;
-    font-weight: bold;
-    color: var(--secondary-color);
-    background-color: var(--primary-color);
-    width: 250px;
-    height: 60px;
-    border-radius: 15px;
-    font-size: 22px;
+	all: unset;
+	text-align: center;
+	font-weight: bold;
+	color: var(--secondary-color);
+	background-color: var(--primary-color);
+	width: 250px;
+	height: 60px;
+	border-radius: 15px;
+	font-size: 22px;
 }

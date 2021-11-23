@@ -116,7 +116,11 @@ namespace WordJumble.Server.Controllers
         [HttpGet]
         public async Task<Player> GetCurrentPlayer()
         {
-            return await _userManager.FindByNameAsync(User.Identity.Name);
+            var playerID = _userManager.GetUserId(User);
+
+            var player = await _userManager.FindByIdAsync(playerID);
+
+            return player;
         }
 
 
@@ -162,6 +166,43 @@ namespace WordJumble.Server.Controllers
             }
 
             return playerDictionaries;
+        }
+
+        [HttpPost]
+        public async Task SavePlayerScore(Score score)
+        {
+            if (User.Identity != null)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var player = await GetCurrentPlayer();
+
+                    player.Score += score.Value;
+
+                    await _userManager.UpdateAsync(player);
+                }
+            }
+        }
+
+        [HttpGet]
+        public List<PlayerScore> GetPlayersScores()
+        {
+            IList<Player> players = _userManager.Users.ToArray();
+            List<PlayerScore> PlayersScores = new List<PlayerScore>();
+
+            foreach (var player in players)
+            {
+                var playerScore = new PlayerScore
+                {
+                    Username = player.UserName,
+                    Score = player.Score
+                };
+
+                PlayersScores.Add(playerScore);
+            }
+
+
+            return PlayersScores;
         }
         #endregion
     }

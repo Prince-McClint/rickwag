@@ -165,10 +165,13 @@
         //NavManager.NavigateTo($"playground");
     }
 
-    public void OnChooseDictionary()
+    public void OnChooseDictionary(bool hasWords)
     {
+        if (!hasWords)
+            return;
+
         ToggleChooseDic();
-        NavManager.NavigateTo($"playground");
+        NavManager.NavigateTo("playground");
     }
 
     #endregion
