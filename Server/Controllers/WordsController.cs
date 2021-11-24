@@ -37,19 +37,6 @@ namespace WordJumble.Server.Controllers
         }
 
         [HttpGet]
-        public Dictionary<string, List<Dictionary>> GetUserDictionaries()
-        {
-            var userDictionary = new Dictionary<string, List<Dictionary>>();
-
-            foreach (var user in _userManager.Users)
-            {
-                userDictionary.Add(user.UserName, user.Dictionaries);
-            }
-
-            return userDictionary;
-        }
-
-        [HttpGet]
         public async Task<string> GetWordMeaning(string word)
         {
             var client = new HttpClient();
@@ -203,6 +190,21 @@ namespace WordJumble.Server.Controllers
 
 
             return PlayersScores;
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<string> GetDictionaryCreator(int id)
+        {
+            var dictionary = _context.Dictionaries.FirstOrDefault(dic => dic.DictionaryID == id);
+
+            if (dictionary == null)
+                return "no creator";
+
+            var playerID = dictionary.PlayerID;
+
+            var player = await _userManager.FindByIdAsync(playerID);
+
+            return player != null ? player.UserName : "no creator";
         }
         #endregion
     }

@@ -147,6 +147,15 @@ namespace WordJumble.Client.Services
 
             return await _httpClient.GetFromJsonAsync<List<PlayerScore>>(requestUri);
         }
+
+        public async Task<string> GetDictionaryCreator(int dictionaryID)
+        {
+            var requestUri = $"api/words/GetDictionaryCreator/{dictionaryID}";
+
+            System.Console.WriteLine("in service getting creator");
+
+            return await _httpClient.GetStringAsync(requestUri);
+        }
         #endregion
     }
 }

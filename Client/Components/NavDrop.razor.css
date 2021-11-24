@@ -1,7 +1,20 @@
 ﻿.container {
-    background-color: var(--extra-color);
+	background-color: var(--tertiary-color);
+	border-top-left-radius: 13px;
+	border-top-right-radius: 13px;
 }
 
 main {
-    margin-top: 20px;
+	margin-top: 20px;
+}
+
+::deep form input {
+	background-color: transparent;
+	border: 3px solid var(--primary-color);
+	color: var(--secondary-color);
+}
+
+::deep form input[type="checkbox"] {
+	width: 25px;
+	height: 25px;
 }

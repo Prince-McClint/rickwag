@@ -1,8 +1,7 @@
-﻿
-<div class="container">
+﻿<div class="container">
     <NavDrop>
         <EditForm Model="SigninRequest" OnValidSubmit="OnSubmit">
-            <DataAnnotationsValidator/>
+            <DataAnnotationsValidator />
 
             <div class="main">
                 <div class="form">
@@ -18,7 +17,7 @@
 
                     <fieldset class="remember-me">
                         <label>remember me</label>
-                        <InputCheckbox @bind-Value="SigninRequest.RememberMe" id="check-rem-me" style="width: 20px; height: 20px" />
+                        <InputCheckbox @bind-Value="SigninRequest.RememberMe" id="check-rem-me" />
                     </fieldset>
                 </div>
 

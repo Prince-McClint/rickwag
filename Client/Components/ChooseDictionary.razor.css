@@ -7,6 +7,7 @@
 	top: calc(50% - 250px);
 	left: calc(50% - 200px);
 	border-radius: 18px;
+	z-index: 5;
 }
 
 .container h3 {
@@ -36,7 +37,15 @@ header button {
 	width: 80%;
 	margin: 0px auto;
 	text-align: left;
-	padding: 20px;
+	padding: 10px 20px;
 	border-radius: 15px;
 	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+.dictionary-creator {
+	margin-top: 5px;
+	font-size: 14px;
+	color: var(--secondary-color);
 }

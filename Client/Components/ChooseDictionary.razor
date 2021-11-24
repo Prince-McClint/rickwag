@@ -13,6 +13,7 @@
             {
                 <div class="dictionary" @onclick="@(() => OnDictionaryClick(dictionary))">
                     <span class="dictionary-name">@dictionary.DictionaryName</span>
+                    <span class="dictionary-creator">by @dictionary.Player</span>
                 </div>
             }
         }
@@ -40,6 +41,11 @@
     protected override async Task OnInitializedAsync()
     {
         DictionariesToChoose = await WordServ.GetDictionaries();
+
+        foreach (var dictionary in DictionariesToChoose)
+        {
+            dictionary.Player = new Player { UserName = await GetPlayerUsername(dictionary.DictionaryID) };
+        }
     }
 
     public async Task OnDictionaryClick(Dictionary dictionary)
@@ -65,6 +71,15 @@
     public void OnCloseClick()
     {
         OnClose.InvokeAsync();
+    }
+
+    public async Task<string> GetPlayerUsername(int dictionaryID)
+    {
+        var userName = await WordServ.GetDictionaryCreator(dictionaryID);
+
+        System.Console.WriteLine($"username => {userName}");
+
+        return userName;
     }
     #endregion
 }

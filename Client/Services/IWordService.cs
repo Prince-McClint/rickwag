@@ -18,5 +18,6 @@ namespace WordJumble.Client.Services
         public Task DeleteDictionary(int dictionaryID);
         public Task SavePlayerScore(int score);
         public Task<List<PlayerScore>> GetPlayersScores();
+        public Task<string> GetDictionaryCreator(int dictionaryID);
     }
 }

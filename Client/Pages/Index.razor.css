@@ -1,8 +1,20 @@
-﻿.container {
+﻿.all-content {
+	height: 100%;
+	background-image: url("/start-now.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+.over-lay {
+	z-index: 0;
+}
+
+.container {
 	position: relative;
 	width: 80vw;
 	margin: 0px auto;
 	color: var(--secondary-color);
+	z-index: 1;
 }
 
 header {
