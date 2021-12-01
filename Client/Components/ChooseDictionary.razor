@@ -1,9 +1,12 @@
 @inject IWordService WordServ
 @inject IJSRuntime JS
+
+@using Newtonsoft.Json
+
 <div class="container">
     <header>
         <h3>choose dictionary</h3>
-        <button @onclick="OnCloseClick"><span class="oi oi-circle-x"></span></button>
+        <CloseButton OnCloseEvent="OnCloseClick" />
     </header>
 
     <div class="DictionariesToChoose">
@@ -46,24 +49,58 @@
         {
             dictionary.Player = new Player { UserName = await GetPlayerUsername(dictionary.DictionaryID) };
         }
+
+        DictionariesToChoose.Insert(0, new Dictionary
+        {
+            DictionaryName = "Default Dictionary",
+            Player = new Player
+            {
+                UserName =
+        "anonymous"
+            }
+        });
     }
 
     public async Task OnDictionaryClick(Dictionary dictionary)
     {
-        var words = await WordServ.GetWordsFromDictionary(dictionary.DictionaryID);
+        bool hasWords = false;
 
-        var hasWords = words.Count > 0 ? true : false;
+        if (dictionary.Player.UserName == "anonymous")
+        {
+            try
+            {
+                var wordList = JsonConvert.DeserializeObject<List<string>>(await WordServ.GetWords());
+
+                dictionary.Words = new List<Word>();
+
+                foreach (var word in wordList)
+                    dictionary.Words.Add(new Word { WordContent = word });
+
+                hasWords = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+        else
+        {
+            var words = await WordServ.GetWordsFromDictionary(dictionary.DictionaryID);
+
+            hasWords = words.Count > 0 ? true : false;
+        }
 
         if (!hasWords)
         {
             await JS.InvokeVoidAsync("show_alert", "sorry, dictionary has no words. \nselect another one");
-            await OnChooseDictionary.InvokeAsync(hasWords);
+            @* await OnChooseDictionary.InvokeAsync(hasWords); *@
 
             return;
         }
         else
         {
-            await WordServ.SetCurrentDictionary(dictionary);
+            await WordServ.SetCurrentDictionary(dictionary, dictionary.Player.UserName == "anonymous" ? true : false);
             await OnChooseDictionary.InvokeAsync(hasWords);
         }
     }
@@ -76,8 +113,6 @@
     public async Task<string> GetPlayerUsername(int dictionaryID)
     {
         var userName = await WordServ.GetDictionaryCreator(dictionaryID);
-
-        System.Console.WriteLine($"username => {userName}");
 
         return userName;
     }

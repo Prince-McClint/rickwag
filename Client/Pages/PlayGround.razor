@@ -1,5 +1,7 @@
 ﻿@page "/playground"
 
+@using Newtonsoft.Json
+
 @inject IWordService WordService
 @inject NavigationManager NavManager
 
@@ -60,7 +62,7 @@
                 </svg>
             </button>
 
-            <button>
+            <button @onclick="ToggleShowHelp">
                 <svg class="btn-svg" xmlns="http://www.w3.org/2000/svg" width="49" height="49"
                     viewBox="0 0 54.101 54.101">
                     <path id="Icon_awesome-question-circle" data-name="Icon awesome-question-circle"
@@ -141,6 +143,17 @@
         <PlayGroundLeaderboard OnClose="OnHideLeaderboard" />
     }
 
+    @if (ShowMeaning)
+    {
+        <WordMeaning WordDefination="@CurrentWord" BuiltInDefinations="@BuiltInDefinations" OnClose="ToggleShowMeaning">
+        </WordMeaning>
+    }
+
+    @if (ShowHelp)
+    {
+        <Help OnCloseEvent="ToggleShowHelp" />
+    }
+
 </div>
 
 
@@ -155,13 +168,14 @@
 
     #region properties
     public Dictionary? CurrentDictionary { get; set; }
-    public string? CurrentWord { get; set; }
+    public string? CurrentWordContent { get; set; }
+    public Word CurrentWord { get; set; }
     public List<string>? WordAsList { get; set; }
     public string BoxSize
     {
         get
         {
-            return GetBoxSize(CurrentWord.Length);
+            return GetBoxSize(CurrentWordContent.Length);
 
         }
     }
@@ -179,6 +193,9 @@
     public bool IsDonePlaying { get; set; } = false;
     public bool ShowLeaderboard { get; set; } = false;
 
+    public bool ShowMeaning { get; set; } = false;
+    public bool ShowHelp { get; set; } = false;
+    public List[] BuiltInDefinations { get; set; }
     #endregion
 
     #region methods
@@ -187,11 +204,28 @@
         GetCurrentWord();
     }
 
+    public void ToggleShowOverlay()
+    {
+        ShowOverlay = ShowOverlay ? false : true;
+    }
+
+    public void ToggleShowMeaning()
+    {
+        ToggleShowOverlay();
+        ShowMeaning = ShowMeaning ? false : true;
+    }
+
+    public void ToggleShowHelp()
+    {
+        ToggleShowOverlay();
+        ShowHelp = ShowHelp ? false : true;
+    }
+
     public void GetCurrentWord()
     {
-        var nextWord = WordService.GetNextWord().WordContent;
+        var nextWord = WordService.GetNextWord();
 
-        if (String.IsNullOrEmpty(nextWord))
+        if (String.IsNullOrEmpty(nextWord.WordContent))
         {
             IsDonePlaying = true;
             ShowOverlay = true;
@@ -199,9 +233,10 @@
             return;
         }
 
+        CurrentWordContent = nextWord.WordContent;
         CurrentWord = nextWord;
 
-        WordAsList = ShuffleList(WordToList(CurrentWord));
+        WordAsList = ShuffleList(WordToList(CurrentWordContent));
 
         canScore = true;
 
@@ -283,9 +318,9 @@
 
     public void PeakLetter()
     {
-        if (CurrentWord == null || WordAsList == null) return;
+        if (CurrentWordContent == null || WordAsList == null) return;
 
-        var correctWordList = WordToList(CurrentWord);
+        var correctWordList = WordToList(CurrentWordContent);
 
         Console.WriteLine($"peak count => {peakCount}");
 
@@ -310,9 +345,9 @@
 
     public void RevealWord()
     {
-        if (CurrentWord == null || WordAsList == null) return;
+        if (CurrentWordContent == null || WordAsList == null) return;
 
-        var correctWordList = WordToList(CurrentWord);
+        var correctWordList = WordToList(CurrentWordContent);
 
         WordAsList = correctWordList;
 
@@ -339,8 +374,8 @@
     {
         ResetPeakCount();
 
-        if (CurrentWord != null)
-            WordAsList = ShuffleList(WordToList(CurrentWord));
+        if (CurrentWordContent != null)
+            WordAsList = ShuffleList(WordToList(CurrentWordContent));
     }
 
     public void OnSubmitClick()
@@ -353,17 +388,34 @@
 
     public void CheckCorrectness()
     {
-        if (WordAsList == null || CurrentWord == null || !canScore) return;
+        if (WordAsList == null || CurrentWordContent == null || !canScore) return;
 
         var playedWord = MergeListToString(WordAsList);
-        var correctWord = CurrentWord.ToUpper();
+        var correctWord = CurrentWordContent.ToUpper();
 
         if (playedWord == correctWord) TotalScore += PossibleScore;
     }
 
-    public void OnMeaningClick()
+    public async Task OnMeaningClick()
     {
-        WordService.GetWordMeaning("nigro");
+        ShowMeaning = ShowMeaning ? false : true;
+
+        ToggleShowOverlay();
+
+        var meaning = await WordService.GetWordMeaning(CurrentWordContent);
+
+
+
+        if (meaning != "failed")
+        {
+            MeaningSearch meaningSearch = JsonConvert.DeserializeObject<MeaningSearch>(meaning);
+
+            if (meaningSearch != null)
+            {
+                BuiltInDefinations = meaningSearch.list;
+            }
+        }
+
     }
 
     public void OnQuitClick()

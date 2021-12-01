@@ -50,13 +50,15 @@ namespace WordJumble.Client.Services
             result.EnsureSuccessStatusCode();
         }
 
-        public async Task SavePlayerProfile(UserProfile profile)
+        public async Task<bool> SavePlayerProfile(UserProfile profile)
         {
             var requestUri = "api/accounts/SavePlayerProfile";
 
             var result = await httpClient.PostAsJsonAsync<UserProfile>(requestUri, profile);
-
+            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) return false;
             result.EnsureSuccessStatusCode();
+
+            return true;
         }
         #endregion
     }

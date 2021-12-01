@@ -1,0 +1,34 @@
+<div class="container">
+    @if (Meanings != null)
+    {
+        <div class="meaning">
+            <button @onclick="DecrementCount"><span class="oi oi-caret-left"></span></button>
+            @if (@Meanings.Any())
+            {
+                <p>@Meanings[CurrentCount].definition</p>
+            }
+            else
+            {
+                <p>word has no meaning</p>
+            }
+            <button @onclick="IncrementCount"><span class="oi oi-caret-right"></span></button>
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public List[] Meanings { get; set; }
+    public int CurrentCount { get; set; } = 0;
+
+    public void IncrementCount()
+    {
+        if (CurrentCount < Meanings.Length - 1) CurrentCount++;
+    }
+    public void DecrementCount()
+    {
+        if (CurrentCount > 0) CurrentCount--;
+        else CurrentCount = 0;
+    }
+}

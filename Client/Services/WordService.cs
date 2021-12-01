@@ -9,6 +9,8 @@ namespace WordJumble.Client.Services
         private readonly HttpClient _httpClient;
         private int count = 0;
         private int currentWordCount = 0;
+        private const int MAXWORDLENGTH = 8;
+        private const int MINWORDLENGTH = 3;
         #endregion
 
         #region properties
@@ -24,19 +26,41 @@ namespace WordJumble.Client.Services
 
         public int GetCount() => count++;
 
-        public async Task SetCurrentDictionary(Dictionary dictionary)
+        public async Task SetCurrentDictionary(Dictionary dictionary, bool isApi)
         {
             currentWordCount = 0;
 
             CurrentDictionary = dictionary;
-            await SetCurrentWords(CurrentDictionary.DictionaryID);
+
+            if (!isApi)
+                await SetCurrentWords(CurrentDictionary.DictionaryID);
+            else
+            {
+                CurrentWords = FilterWordsBySize(dictionary.Words);
+            }
         }
 
         private async Task SetCurrentWords(int currentDicID)
         {
-            CurrentWords = await GetWordsFromDictionary(currentDicID);
+            CurrentWords = FilterWordsBySize(await GetWordsFromDictionary(currentDicID));
         }
 
+        private List<Word> FilterWordsBySize(List<Word> words)
+        {
+            List<Word> newWords = new List<Word>();
+
+            foreach (Word word in words)
+            {
+                var wordContent = word.WordContent;
+
+                if (wordContent.Length > MAXWORDLENGTH || wordContent.Length < MINWORDLENGTH)
+                    continue;
+
+                newWords.Add(word);
+            }
+
+            return newWords;
+        }
         public Word GetNextWord()
         {
             var word = new Word();
@@ -68,11 +92,45 @@ namespace WordJumble.Client.Services
                 },
             };
 
+            try
+            {
+                using (var response = await client.SendAsync(request))
+                {
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                        var body = await response.Content.ReadAsStringAsync();
+                        return body;
+                    }
+                    catch (HttpRequestException e)
+                    {
+
+                        return "failed";
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+
+                return "failed";
+            }
+        }
+
+        public async Task<string> GetWords(int count, bool canSwear)
+        {
+            var swear = canSwear ? 1 : 0;
+
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"https://random-word-api.herokuapp.com/word?number={count}&swear={swear}")
+            };
+
             using (var response = await client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(body);
 
                 return body;
             }
@@ -103,7 +161,7 @@ namespace WordJumble.Client.Services
 
         public async Task<Player> GetCurrentPlayer()
         {
-            var requestUri = "api/words/GetcurrentPlayer";
+            var requestUri = "api/words/GetCurrentPlayer";
 
             var player = await _httpClient.GetFromJsonAsync<Player>(requestUri);
 
@@ -151,8 +209,6 @@ namespace WordJumble.Client.Services
         public async Task<string> GetDictionaryCreator(int dictionaryID)
         {
             var requestUri = $"api/words/GetDictionaryCreator/{dictionaryID}";
-
-            System.Console.WriteLine("in service getting creator");
 
             return await _httpClient.GetStringAsync(requestUri);
         }

@@ -20,6 +20,18 @@ header {
 	text-align: center;
 	font-size: 18px;
 	margin-bottom: -8px;
+	transition: 0.4s ease-out;
+}
+
+#quit-btn:hover #text {
+	color: var(--primary-color);
+}
+
+#quit-btn:hover .cls-1,
+#quit-btn:hover .cls-2,
+#quit-btn:hover .cls-4 {
+	fill: var(--secondary-color);
+	stroke: none;
 }
 
 #score-box {
@@ -58,11 +70,27 @@ header {
 nav button {
 	all: unset;
 	margin-left: 80px;
+	text-align: center;
+	width: 40px;
+	height: 40px;
+	transition: 0.4s ease-out;
+}
+
+nav button:hover {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	background-color: var(--primary-color);
 }
 
 .btn-svg {
 	width: 30px;
 	height: 30px;
+	transition: 0.6s ease-out;
+}
+
+nav button:hover .btn-svg {
+	fill: var(--secondary-color);
 }
 
 main {
@@ -100,6 +128,17 @@ main {
 	font-size: 20px;
 	font-style: italic;
 	box-shadow: 10px 8px 3px rgb(255, 74, 235, 0.55);
+	transition: 0.2s ease-out;
+}
+
+.buttons button:hover {
+	background-color: var(--primary-color);
+	color: var(--secondary-color);
+	box-shadow: 10px 8px 3px rgba(0, 0, 0, 0.55);
+}
+
+.buttons button:active {
+	transform: scale(0.8);
 }
 
 footer {
@@ -122,4 +161,16 @@ footer button {
 	height: 60px;
 	border-radius: 15px;
 	font-size: 22px;
+	transition: 0.4s ease-out;
+}
+
+footer button:hover {
+	background-color: transparent;
+	color: var(--primary-color);
+	border: 3px solid var(--secondary-color);
+	border-radius: 0;
+}
+
+footer button:active {
+	transform: scale(0.8);
 }

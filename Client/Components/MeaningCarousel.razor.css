@@ -1,0 +1,28 @@
+.container {
+	/* margin-top: 50px; */
+}
+
+.meaning {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.meaning span {
+	color: var(--secondary-color);
+}
+
+.meaning p {
+	width: 80%;
+	max-height: 100px;
+	overflow-y: auto;
+}
+
+button {
+	all: unset;
+	background-color: var(--tertiary-color);
+	width: 25px;
+	height: 25px;
+	text-align: center;
+	border-radius: 50%;
+}

@@ -1,0 +1,42 @@
+<div class="container">
+    <h1>Word Meaning</h1>
+    <div class="meaning">
+        <p class="label">meaning</p>
+
+        @if (!String.IsNullOrEmpty(GetWordMeaning()))
+        {
+            <p class="the-meaning">@GetWordMeaning()</p>
+        }
+        else if (BuiltInDefinations != null)
+        {
+            <MeaningCarousel Meanings=BuiltInDefinations />
+        }
+        else
+        {
+            <p class="the-meaning">sorry, word has no meaning</p>
+        }
+    </div>
+
+    <CloseButton OnCloseEvent="OnCloseClick" />
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public Word WordDefination { get; set; } = new Word();
+
+    [Parameter]
+    public List[] BuiltInDefinations { get; set; }
+
+    public void OnCloseClick()
+    {
+        OnClose.InvokeAsync();
+    }
+
+    public string GetWordMeaning()
+    {
+        return WordDefination.Meaning;
+    }
+}

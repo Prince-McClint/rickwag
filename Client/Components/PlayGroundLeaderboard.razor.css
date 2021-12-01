@@ -23,4 +23,12 @@ button {
 	padding: 5px;
 	font-size: 18px;
 	font-weight: bold;
+	transition: 0.4s ease-out;
+}
+
+button:hover {
+	background-color: var(--tertiary-color);
+	color: var(--primary-color);
+	border: 0px;
+	border-radius: 12px;
 }

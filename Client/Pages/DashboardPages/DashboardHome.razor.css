@@ -20,4 +20,17 @@ h3 {
 	height: 50px;
 	border-radius: 10px;
 	margin-top: 50px;
+	transition: 0.4s ease-in-out;
+}
+
+.play-btn:hover {
+	border-radius: 0;
+	border: 3px solid var(--secondary-color);
+	color: var(--tertiary-color);
+	background-color: transparent;
+	font-style: normal;
+}
+
+.play-btn:active {
+	transform: scale(1.3);
 }

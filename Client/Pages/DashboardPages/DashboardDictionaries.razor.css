@@ -14,6 +14,21 @@
 	color: var(--secondary-color);
 	padding: 10px;
 	margin: 50px 60px;
+	transition: .4s ease-out;
+}
+
+.container .plus-icon {
+	fill: #d3fbd8;
+	transition: .4s ease-out;
+}
+
+.container button:hover {
+	background-color: var(--tertiary-color);
+	color: var(--primary-color);
+}
+
+.container button:hover .plus-icon {
+	fill: var(--secondary-color);
 }
 
 .container button .name {
@@ -58,4 +73,12 @@
 .edit-svg,
 .delete-svg {
 	fill: var(--primary-color);
+}
+
+.edit:hover .edit-svg{
+	fill: var(--secondary-color);
+}
+
+.delete:hover .delete-svg {
+	fill: var(--warning-color);
 }

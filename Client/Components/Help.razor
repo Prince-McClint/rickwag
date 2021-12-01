@@ -1,0 +1,45 @@
+<div class="container">
+    <h1>I need some help😁😁</h1>
+
+    <div class="instructions">
+        <h2>How to Play</h2>
+        <p>Drag the letters around to form a valid word</p>
+
+        <h2>Score</h2>
+        <h3>possible score</h3>
+        <p>this shows how many points you will gain if you successfully create a valid word</p>
+
+        <h3>total score</h3>
+        <p>this shows how many points you have gained in total over the course of the current play session</p>
+
+        <h2>buttons</h2>
+        <h3>peak</h3>
+        <p>use peak button to reveal the correct letter in the first incorrect letter position</p>
+        <p class="warning">note that doing this will subtract 3 points from the possible score</p>
+
+        <h3>reveal</h3>
+        <p>use the reveal button to reveal the whole correct word</p>
+        <p class="warning">note that doing this will subtract all the points from the possible score of the specific
+            word</p>
+
+        <h3>shuffle</h3>
+        <p>use the shuffle button to shuffle the letters to gain a different perspective</p>
+
+        <h2>extra tips</h2>
+        <p>you can view the meaning of the current word to gain a hint of what the word is</p>
+        <p class="warning">have fun😎</p>
+    </div>
+
+    <CloseButton OnCloseEvent="OnClose" />
+
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnCloseEvent { get; set; }
+
+    public void OnClose()
+    {
+        OnCloseEvent.InvokeAsync();
+    }
+}

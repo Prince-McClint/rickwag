@@ -1,50 +1,55 @@
-﻿
-.main {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 280px;
-    padding-top: 20px;
+﻿.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 280px;
+	padding-top: 20px;
 }
 
 .main fieldset {
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    font-size: 22px;
+	border: none;
+	display: flex;
+	justify-content: space-between;
+	font-size: 22px;
 }
 
-.main fieldset.password, fieldset.confirm-password {
-    margin-top: 10px;
+.main fieldset.password,
+fieldset.confirm-password {
+	margin-top: 10px;
 }
 
 .main fieldset input {
-    width: 150px;
+	width: 150px;
 }
 
 .buttons {
-    display: flex;
+	display: flex;
 }
 
 button {
-    font-size: 25px;
-    background-color: transparent;
-    width: 50%;
-    height: 50px;
-    border: 3px solid var(--secondary-color);
+	font-size: 25px;
+	background-color: transparent;
+	width: 50%;
+	height: 50px;
+	border: 3px solid var(--secondary-color);
 }
 
 button.signup {
-    border-right: 1px solid var(--secondary-color);
-    border-radius: 12px 0px 12px;
+	border-right: 1px solid var(--secondary-color);
+	border-radius: 12px 0px 12px;
 }
 
 button.cancel {
-    border-left: 1px solid var(--secondary-color);
-    border-radius: 0px 12px 0px;
+	border-left: 1px solid var(--secondary-color);
+	border-radius: 0px 12px 0px;
+}
+
+button:hover {
+	border-radius: 0;
+	font-weight: bold;
 }
 
 .error {
-    color: red;
-    padding: 20px;
+	color: red;
+	padding: 20px;
 }

@@ -34,6 +34,13 @@ nav ul {
 	color: var(--secondary-color);
 	background-color: transparent;
 	border: none;
+	transition: 0.4s ease-out;
+}
+
+.nav-btn:hover {
+	border: 3px solid var(--secondary-color);
+	padding: 5px 10px;
+	color: var(--tertiary-color);
 }
 
 .title {
@@ -43,12 +50,30 @@ nav ul {
 .title h1 {
 	font-size: 80px;
 	margin-bottom: 10px;
+	transition: 3s ease-in-out;
+}
+
+.title h1:hover {
+	font-size: 150px;
+}
+
+@keyframes lights-in-out {
+	from {
+		color: var(--tertiary-color);
+	}
+	to {
+		color: var(--secondary-color);
+	}
 }
 
 .title h4 {
 	font-weight: normal;
 	font-size: 28px;
 	margin-top: 0px;
+	animation-name: lights-in-out;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
 }
 
 .content {
@@ -65,6 +90,19 @@ nav ul {
 	width: 300px;
 	height: 65px;
 	border-radius: 10px;
+	transition: 0.1s ease-out;
+}
+
+.play-btn:hover {
+	border-radius: 0;
+	color: var(--tertiary-color);
+	background-color: transparent;
+	border: 3px solid var(--secondary-color);
+	font-style: normal;
+}
+
+.play-btn:active {
+	transform: scale(1.2);
 }
 
 .nav-show-login,

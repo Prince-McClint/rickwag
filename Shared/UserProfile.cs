@@ -11,6 +11,7 @@ public class UserProfile
     public string CurrentPassword { get; set; }
 
     [Required]
+    [StringLength(16, ErrorMessage = "sorry, password length must exceed 7 and be less than 16", MinimumLength = 8)]
     public string Password { get; set; }
 
     [Required]

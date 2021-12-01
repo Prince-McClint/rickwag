@@ -45,6 +45,11 @@ button.cancel {
 	border-radius: 0px 12px 0px;
 }
 
+button:hover {
+	border-radius: 0;
+	font-weight: bold;
+}
+
 #error {
 	color: red;
 	padding: 20px;

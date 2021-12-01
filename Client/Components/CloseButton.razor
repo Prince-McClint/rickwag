@@ -1,0 +1,14 @@
+<button @onclick="OnCloseClick">
+    <span class="oi oi-circle-x"></span>
+</button>
+
+
+@code {
+    [Parameter]
+    public EventCallback OnCloseEvent { get; set; }
+
+    public void OnCloseClick()
+    {
+        OnCloseEvent.InvokeAsync();
+    }
+}

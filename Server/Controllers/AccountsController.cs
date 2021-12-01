@@ -82,26 +82,26 @@ namespace WordJumble.Server.Controllers
         }
 
         [HttpPost]
-        public async Task SavePlayerProfile(UserProfile profile)
+        public async Task<IActionResult> SavePlayerProfile(UserProfile profile)
         {
             var beforeUsername = profile.PreviousUsername;
             var afterUsername = profile.Username;
 
             var player = await userManager.FindByNameAsync(beforeUsername);
 
-            if (player == null) return;
-
             player.UserName = afterUsername;
 
-            var result = await userManager.UpdateAsync(player);
-
-            if (result.Succeeded)
-                System.Console.WriteLine($"updated {beforeUsername} to {afterUsername}");
+            await userManager.UpdateAsync(player);
 
             var pass_result = await userManager.ChangePasswordAsync(player, profile.CurrentPassword, profile.Password);
 
-            if (pass_result.Succeeded)
-                System.Console.WriteLine($"updated {profile.CurrentPassword} to {profile.Password}");
+            if (!pass_result.Succeeded)
+            {
+                Console.WriteLine("...............PASSWORD save Error!!!!!!!!!!!!!!!!!!!!!!");
+                return BadRequest("sorry, current password is incorrect");
+            }
+
+            return Ok();
         }
         #endregion
     }
