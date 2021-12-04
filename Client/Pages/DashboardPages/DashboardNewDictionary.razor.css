@@ -22,6 +22,13 @@
 	width: 200px;
 	padding: 10px;
 	color: var(--tertiary-color);
+	transition: 0.4s ease-out;
+}
+
+.dictionary-name button:hover {
+	background-color: var(--tertiary-color);
+	color: var(--secondary-color);
+	border: none;
 }
 
 .new-word ::deep form {
@@ -40,6 +47,20 @@
 	align-items: center;
 	width: 200px;
 	padding: 10px;
+	transition: 0.4s ease-out;
+}
+
+.new-word button:hover {
+	background-color: var(--tertiary-color);
+}
+
+button .plus-icon {
+	fill: var(--tertiary-color);
+	transition: 0.6s ease-in;
+}
+
+button:hover .plus-icon {
+	fill: var(--secondary-color);
 }
 
 .container button .name {
