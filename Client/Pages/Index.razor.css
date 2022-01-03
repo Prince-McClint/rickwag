@@ -50,11 +50,6 @@ nav ul {
 .title h1 {
 	font-size: 80px;
 	margin-bottom: 10px;
-	transition: 3s ease-in-out;
-}
-
-.title h1:hover {
-	font-size: 150px;
 }
 
 @keyframes lights-in-out {

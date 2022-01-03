@@ -10,6 +10,8 @@ namespace WordJumble.Shared
         [Required]
         public string DictionaryName { get; set; }
 
+        public int LevelsCount { get; set; } = 3;
+
         //relationship properties
         public List<Word>? Words { get; set; }
 

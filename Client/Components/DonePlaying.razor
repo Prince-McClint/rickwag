@@ -10,6 +10,7 @@
         <p><span id="score-value">@TotalScore</span> points</p>
     </div>
 
+    <button class="next-level" style="display: @NextLevelDisplay" @onclick="OnNextLevelClick">next level</button>
     <button @onclick="OnOkayClick">okey dokey</button>
 </div>
 
@@ -18,11 +19,31 @@
     [Parameter]
     public int TotalScore { get; set; }
 
+    [Parameter]
+    public int CurrentLevel { get; set; }
+
+    [Parameter]
+    public EventCallback NextLevelClick { get; set; }
+
+    public string NextLevelDisplay { get; set; } = "none";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await WordService.SetCurrentDictionary(WordService.GetCurrentDictionary(), false, ++CurrentLevel);
+
+        NextLevelDisplay = WordService.GetCount() > 0 ? "block" : "none";
+    }
 
     public async Task OnOkayClick()
     {
         await SaveScore();
         NavManager.NavigateTo("/dashboard");
+    }
+
+    public void OnNextLevelClick()
+    {
+        NextLevelClick.InvokeAsync();
     }
 
     public async Task SaveScore()

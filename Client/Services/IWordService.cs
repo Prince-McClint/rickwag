@@ -4,7 +4,8 @@ namespace WordJumble.Client.Services
 {
     public interface IWordService
     {
-        public Task SetCurrentDictionary(Dictionary dictionary, bool isApi = false);
+        public Task SetCurrentDictionary(Dictionary dictionary, bool isApi = false, int level = 1);
+        public Dictionary GetCurrentDictionary();
         public int GetCount();
         public Word GetNextWord();
         public Task<Dictionary> GetDictionary(int ID);
@@ -20,5 +21,6 @@ namespace WordJumble.Client.Services
         public Task<List<PlayerScore>> GetPlayersScores();
         public Task<string> GetDictionaryCreator(int dictionaryID);
         public Task<string> GetWords(int count = 10, bool canSwear = false);
+        public void ResetCurrentWordCount();
     }
 }

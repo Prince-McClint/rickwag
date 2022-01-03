@@ -49,6 +49,7 @@
         </div>
 
         <div id="score-box">
+            <div>level <span id="level">@CurrentLevel</span></div>
             <div>possible score <span id="possible-score">@PossibleScore</span></div>
             <div>total score <span id="total-score">@TotalScore</span></div>
         </div>
@@ -134,7 +135,7 @@
 
     @if (IsDonePlaying)
     {
-        <DonePlaying TotalScore=TotalScore />
+        <DonePlaying TotalScore=TotalScore CurrentLevel=CurrentLevel NextLevelClick="OnNextLevelClick" />
     }
 
 
@@ -187,6 +188,7 @@
         }
     }
 
+    public int CurrentLevel { get; set; } = 1;
     public int PossibleScore { get; set; } = 0;
     public int TotalScore { get; set; } = 0;
     public bool ShowOverlay { get; set; } = false;
@@ -378,6 +380,10 @@
             WordAsList = ShuffleList(WordToList(CurrentWordContent));
     }
 
+
+    //TODO: check if next level is available
+    //TODO: enable or disable button
+
     public void OnSubmitClick()
     {
         CheckCorrectness();
@@ -434,6 +440,16 @@
     {
         ShowOverlay = false;
         ShowLeaderboard = false;
+    }
+
+    public void OnNextLevelClick()
+    {
+        IsDonePlaying = false;
+        ShowOverlay = false;
+        CurrentLevel++;
+
+        WordService.ResetCurrentWordCount();
+        GetCurrentWord();
     }
     #endregion
 }

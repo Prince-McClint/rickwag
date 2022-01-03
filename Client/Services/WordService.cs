@@ -7,7 +7,6 @@ namespace WordJumble.Client.Services
     {
         #region fields
         private readonly HttpClient _httpClient;
-        private int count = 0;
         private int currentWordCount = 0;
         private const int MAXWORDLENGTH = 8;
         private const int MINWORDLENGTH = 3;
@@ -24,25 +23,32 @@ namespace WordJumble.Client.Services
             _httpClient = httpClient;
         }
 
-        public int GetCount() => count++;
+        public int GetCount() => CurrentWords.Count;
 
-        public async Task SetCurrentDictionary(Dictionary dictionary, bool isApi)
+        public void ResetCurrentWordCount() => currentWordCount = 0;
+
+        public Dictionary GetCurrentDictionary()
         {
-            currentWordCount = 0;
+            return CurrentDictionary;
+        }
+
+        public async Task SetCurrentDictionary(Dictionary dictionary, bool isApi, int level)
+        {
+            ResetCurrentWordCount();
 
             CurrentDictionary = dictionary;
 
             if (!isApi)
-                await SetCurrentWords(CurrentDictionary.DictionaryID);
+                await SetCurrentWords(CurrentDictionary.DictionaryID, level);
             else
             {
                 CurrentWords = FilterWordsBySize(dictionary.Words);
             }
         }
 
-        private async Task SetCurrentWords(int currentDicID)
+        private async Task SetCurrentWords(int currentDicID, int level)
         {
-            CurrentWords = FilterWordsBySize(await GetWordsFromDictionary(currentDicID));
+            CurrentWords = FilterWordsBySize(FilterWordsByLevel(await GetWordsFromDictionary(currentDicID), level));
         }
 
         private List<Word> FilterWordsBySize(List<Word> words)
@@ -61,9 +67,32 @@ namespace WordJumble.Client.Services
 
             return newWords;
         }
+
+        private List<Word> FilterWordsByLevel(List<Word> words, int level)
+        {
+            List<Word> newWords = new List<Word>();
+
+            foreach (Word word in words)
+            {
+                var wordLevel = word.Level;
+
+                if (wordLevel != level)
+                    continue;
+
+                newWords.Add(word);
+            }
+
+            return newWords;
+        }
+
         public Word GetNextWord()
         {
             var word = new Word();
+
+            foreach (var wd in CurrentWords)
+            {
+                Console.WriteLine(wd.WordContent);
+            }
 
             if (currentWordCount < CurrentWords?.Count)
                 word = CurrentWords[currentWordCount++];

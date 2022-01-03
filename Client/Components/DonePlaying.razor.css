@@ -32,6 +32,15 @@ button:hover {
 	font-weight: bold;
 }
 
+button.next-level {
+	margin-bottom: 20px;
+	font-size: 15px;
+	width: 120px;
+	height: 40px;
+	background-color: transparent;
+	color: var(--primary-color);
+}
+
 p {
 	font-size: 18px;
 }
