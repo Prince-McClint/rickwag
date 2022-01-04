@@ -89,11 +89,6 @@ namespace WordJumble.Client.Services
         {
             var word = new Word();
 
-            foreach (var wd in CurrentWords)
-            {
-                Console.WriteLine(wd.WordContent);
-            }
-
             if (currentWordCount < CurrentWords?.Count)
                 word = CurrentWords[currentWordCount++];
 

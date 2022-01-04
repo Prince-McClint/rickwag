@@ -128,6 +128,8 @@
         </button>
     </footer>
 
+    <button class="music-toggle" @onclick="ToggleMusic">toggle music</button>
+
     @if (ShowOverlay)
     {
         <div class="overlay"></div>
@@ -155,7 +157,15 @@
         <Help OnCloseEvent="ToggleShowHelp" />
     }
 
+    <audio id="bg-audio" autoplay>
+        <source src="/Audio/stillAlive.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="btn-audio">
+        <source src=@sounds[CurrentAudio] type="audio/wav">
+    </audio>
 </div>
+
 
 
 @code {
@@ -165,6 +175,16 @@
     private int peakCount = 0;
     private const int LETTERSCORE = 3;
     private bool canScore = false;
+    private bool musicPlaying = true;
+    private Dictionary<AUDIOTYPE, string> sounds = new Dictionary<AUDIOTYPE, string>()
+{
+{AUDIOTYPE.buttonPress, "/Audio/buttonPress.wav"},
+{AUDIOTYPE.submitPress, "/Audio/submitPress.wav"},
+{AUDIOTYPE.buttonPress2, "/Audio/buttonPress2.wav"},
+{AUDIOTYPE.quitPress, "/Audio/quit.wav"},
+{AUDIOTYPE.pick, "/Audio/pick.wav"},
+{AUDIOTYPE.drop, "/Audio/drop.wav"}
+};
     #endregion
 
     #region properties
@@ -198,12 +218,16 @@
     public bool ShowMeaning { get; set; } = false;
     public bool ShowHelp { get; set; } = false;
     public List[] BuiltInDefinations { get; set; }
+    public AUDIOTYPE CurrentAudio { get; set; } = AUDIOTYPE.buttonPress;
+
     #endregion
 
     #region methods
     protected override async Task OnInitializedAsync()
     {
         GetCurrentWord();
+
+        @* await JS.InvokeVoidAsync("play_audio", "bg-audio"); *@
     }
 
     public void ToggleShowOverlay()
@@ -221,6 +245,8 @@
     {
         ToggleShowOverlay();
         ShowHelp = ShowHelp ? false : true;
+
+        PlayBtnSound(AUDIOTYPE.buttonPress2);
     }
 
     public void GetCurrentWord()
@@ -341,6 +367,8 @@
         }
 
         PossibleScorePenalty(LETTERSCORE);
+
+        PlayBtnSound();
     }
 
     public void ResetPeakCount() => peakCount = 0;
@@ -354,6 +382,8 @@
         WordAsList = correctWordList;
 
         PossibleScorePenalty(PossibleScore);
+
+        PlayBtnSound();
     }
 
     public void PossibleScorePenalty(int penaltyValue)
@@ -365,11 +395,15 @@
     public void OnDragStart(int draggedIndex)
     {
         currentDraggedIndex = draggedIndex;
+
+        PlayBtnSound(AUDIOTYPE.pick);
     }
 
     public void OnDragDrop(int dropIndex)
     {
         SwapLetters(currentDraggedIndex, dropIndex);
+
+        PlayBtnSound(AUDIOTYPE.drop);
     }
 
     public void OnShuffleClick()
@@ -378,6 +412,9 @@
 
         if (CurrentWordContent != null)
             WordAsList = ShuffleList(WordToList(CurrentWordContent));
+
+
+        PlayBtnSound();
     }
 
 
@@ -390,6 +427,8 @@
 
         ResetPeakCount();
         GetCurrentWord();
+
+        PlayBtnSound(AUDIOTYPE.submitPress);
     }
 
     public void CheckCorrectness()
@@ -404,6 +443,8 @@
 
     public async Task OnMeaningClick()
     {
+        PlayBtnSound(AUDIOTYPE.buttonPress2);
+
         ShowMeaning = ShowMeaning ? false : true;
 
         ToggleShowOverlay();
@@ -421,19 +462,22 @@
                 BuiltInDefinations = meaningSearch.list;
             }
         }
-
     }
 
     public void OnQuitClick()
     {
         ShowOverlay = true;
         IsDonePlaying = true;
+
+        PlayBtnSound(AUDIOTYPE.quitPress);
     }
 
     public void OnShowLeaderboardClick()
     {
         ShowOverlay = true;
         ShowLeaderboard = true;
+
+        PlayBtnSound(AUDIOTYPE.buttonPress2);
     }
 
     public void OnHideLeaderboard()
@@ -450,6 +494,27 @@
 
         WordService.ResetCurrentWordCount();
         GetCurrentWord();
+    }
+
+    private void PlayBtnSound(AUDIOTYPE audioType = AUDIOTYPE.buttonPress)
+    {
+        CurrentAudio = audioType;
+
+        JS.InvokeVoidAsync("play_audio", "btn-audio");
+    }
+
+    private void ToggleMusic()
+    {
+        if (musicPlaying)
+        {
+            JS.InvokeVoidAsync("pause_audio", "bg-audio");
+            musicPlaying = false;
+        }
+        else
+        {
+            JS.InvokeVoidAsync("play_audio", "bg-audio");
+            musicPlaying = true;
+        }
     }
     #endregion
 }
