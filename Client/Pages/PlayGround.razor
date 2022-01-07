@@ -258,6 +258,7 @@
             IsDonePlaying = true;
             ShowOverlay = true;
             canScore = false;
+
             return;
         }
 
@@ -329,14 +330,6 @@
         return (letterBoxSize - decrementSize).ToString();
     }
 
-    public void ListToConsole<T>(List<T> list)
-    {
-        foreach (var item in list)
-        {
-            Console.WriteLine(item);
-        }
-    }
-
     public void SwapLetters(int firstIndex, int secondIndex)
     {
         var firstLetter = WordAsList[firstIndex];
@@ -349,8 +342,6 @@
         if (CurrentWordContent == null || WordAsList == null) return;
 
         var correctWordList = WordToList(CurrentWordContent);
-
-        Console.WriteLine($"peak count => {peakCount}");
 
         if (WordAsList[peakCount] != correctWordList[peakCount])
         {

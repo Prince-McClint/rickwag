@@ -2,6 +2,21 @@
 	margin: 50px 60px;
 }
 
+.right-hand-side {
+	float: right;
+	width: 50%;
+}
+
+.dictionary {
+	width: 40%;
+}
+
+.dictionary fieldset {
+	padding: 0px;
+	border: none;
+	margin-bottom: 30px;
+}
+
 .dictionary-name {
 	display: flex;
 	align-items: center;
@@ -10,24 +25,48 @@
 
 .dictionary-name .name {
 	color: var(--secondary-color);
-	font-size: 24px;
+	font-size: 18px;
 }
 
-.dictionary-name button {
+.dictionary button {
 	all: unset;
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: transparent;
 	border: 3px solid var(--secondary-color);
 	font-size: 18px;
-	width: 200px;
+	width: 100px;
+	height: 10px;
 	padding: 10px;
 	color: var(--tertiary-color);
+	transition: 0.4s ease-out;
+}
+
+.dictionary button:hover {
+	background-color: var(--tertiary-color);
+	color: var(--secondary-color);
+}
+
+.dictionary .dictionary-levels-count {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.dictionary .dictionary-levels-count .levels-count {
+	color: var(--secondary-color);
+	font-size: 18px;
+}
+
+.new-word {
+	width: 40%;
 }
 
 .new-word ::deep form {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
+	align-items: flex-start;
 	margin-top: 40px;
 }
 
@@ -37,9 +76,25 @@
 	border: 3px solid var(--tertiary-color);
 	font-size: 24px;
 	display: flex;
+	justify-content: center;
 	align-items: center;
-	width: 200px;
+	width: 100px;
+	height: 15px;
 	padding: 10px;
+	transition: 0.4s ease-out;
+}
+
+.new-word button:hover {
+	background-color: var(--tertiary-color);
+}
+
+button .plus-icon {
+	fill: var(--tertiary-color);
+	transition: 0.6s ease-in;
+}
+
+button:hover .plus-icon {
+	fill: var(--secondary-color);
 }
 
 .container button .name {
@@ -53,21 +108,22 @@
 }
 
 .new-word div {
+	width: 100%;
 	display: flex;
-	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
+	margin-bottom: 40px;
 }
 
 .new-word ::deep input {
 	background-color: transparent;
 	border: 3px solid var(--secondary-color);
-	font-size: 22px;
+	font-size: 14px;
 	margin-left: 20px;
 }
 
 ::deep input {
 	margin-left: 50px;
-	font-size: 22px;
+	font-size: 14px;
 	background-color: transparent;
 	border: 3px solid var(--tertiary-color);
 	color: var(--tertiary-color);
@@ -83,7 +139,7 @@
 
 .word-list {
 	margin-top: 50px;
-	max-height: 340px;
+	max-height: 440px;
 	overflow-y: auto;
 }
 

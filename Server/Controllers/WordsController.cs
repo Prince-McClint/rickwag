@@ -126,6 +126,7 @@ namespace WordJumble.Server.Controllers
 
             existingDictionary.DictionaryName = dictionary.DictionaryName;
             existingDictionary.Words = wordsToAdd;
+            existingDictionary.LevelsCount = dictionary.LevelsCount;
 
             _context.SaveChanges();
         }
