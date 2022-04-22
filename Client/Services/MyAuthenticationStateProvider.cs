@@ -66,6 +66,12 @@ namespace WordJumble.Client.Services
             await accountsApi.Logout();
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
+
+        public async Task DeleteCurrentUserAccount()
+        {
+            await accountsApi.DeleteCurrentUserAccount();
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        }
         #endregion
     }
 }

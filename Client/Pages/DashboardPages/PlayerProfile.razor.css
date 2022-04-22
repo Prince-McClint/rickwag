@@ -52,3 +52,8 @@ button:hover {
 button:active {
 	transform: scale(0.8);
 }
+
+button#delete-btn {
+	background-color: var(--warning-color);
+	color: var(--tertiary-color);
+}

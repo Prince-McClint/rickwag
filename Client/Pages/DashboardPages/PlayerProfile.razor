@@ -2,6 +2,8 @@
 
 @inject IAccountsService AccountService
 @inject IJSRuntime JS
+@inject MyAuthenticationStateProvider StateProvider
+@inject NavigationManager NavManager
 
 <div class="container">
     <h1>@Profile.Username Profile</h1>
@@ -35,6 +37,8 @@
 
         <button type="submit">save</button>
     </EditForm>
+
+    <button id="delete-btn" @onclick="OnDeletePlayerAccountClick">delete account</button>
 
 </div>
 
@@ -70,6 +74,19 @@
         Profile.CurrentPassword = "";
         Profile.Password = "";
         Profile.ConfirmPassword = "";
+    }
+
+
+    public async Task OnDeletePlayerAccountClick()
+    {
+        var result = await JS.InvokeAsync<bool>("show_confirm", "Do you really wanna delete your account?");
+
+        if (result)
+        {
+            await StateProvider.DeleteCurrentUserAccount();
+            await StateProvider.Logout();
+            NavManager.NavigateTo("/");
+        }
     }
     #endregion
 }

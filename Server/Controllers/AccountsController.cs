@@ -103,6 +103,20 @@ namespace WordJumble.Server.Controllers
 
             return Ok();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCurrentUserAccount()
+        {
+            if (!User.Identity.IsAuthenticated) return Ok();
+
+            var currentUser = GetCurrentUser();
+
+            var currentPlayer = await userManager.FindByNameAsync(currentUser.Username);
+
+            await userManager.DeleteAsync(currentPlayer);
+
+            return Ok();
+        }
         #endregion
     }
 }

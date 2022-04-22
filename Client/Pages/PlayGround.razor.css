@@ -142,7 +142,7 @@ main {
 }
 
 footer {
-	margin-top: 50px;
+	margin-top: 20px;
 	display: flex;
 	justify-content: center;
 }
@@ -179,10 +179,18 @@ button.music-toggle {
 	position: absolute;
 	bottom: 20px;
 	right: 20px;
-	opacity: 0;
+	border: 3px solid var(--secondary-color);
+	background-color: transparent;
+	color: var(--primary-color);
+	padding: 10px;
 	transition: 0.4s ease-out;
 }
 
 button.music-toggle:hover {
-	opacity: 1;
+	color: var(--secondary-color);
+	border-color: var(--primary-color);
+}
+
+button.music-toggle:active {
+	transform: scale(.8);
 }

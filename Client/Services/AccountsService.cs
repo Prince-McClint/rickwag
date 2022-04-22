@@ -60,6 +60,14 @@ namespace WordJumble.Client.Services
 
             return true;
         }
+
+        public async Task DeleteCurrentUserAccount()
+        {
+            var requestUri = "api/accounts/DeleteCurrentUserAccount";
+
+            var result = await httpClient.DeleteAsync(requestUri);
+            result.EnsureSuccessStatusCode();
+        }
         #endregion
     }
 }

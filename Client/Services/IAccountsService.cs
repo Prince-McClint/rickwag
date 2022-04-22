@@ -14,5 +14,6 @@ namespace WordJumble.Client.Services
         Task Logout();
         Task<CurrentUser> GetCurrentUser();
         Task<bool> SavePlayerProfile(UserProfile profile);
+        Task DeleteCurrentUserAccount();
     }
 }
