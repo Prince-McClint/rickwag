@@ -1,5 +1,5 @@
 # WordJumble
-A Word Puzzle App Created To Learn and Practice Blazor Web Assembly
+A Word Puzzle App Created using Blazor Assembly
 
 ## Features
 - User Accounts
